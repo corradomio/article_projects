@@ -146,16 +146,8 @@ def gen_dataset(N, M, K):
 
 
 def main():
-    # N = 1000
-    # M = 2
-    # bounds = gen_bounds(M)
-    # X, y = gen_data(N, M, bounds)
-
-    # plot_data(X, y, bounds)
-    # plot_data(X[:100], y[:100], bounds)
-    # plot_data(X[:10], y[:10], bounds)
-
-    k = 3
+    k = 0   # random subdivisions
+    # k = 3   # regular k subdivisions
     ns = [100, 1000, 10000]
     ds = [2, 3, 4, 5, 10, 25, 50, 100]
     # ns = [1000, 10000]

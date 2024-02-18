@@ -4,3 +4,5 @@ _suspended
 *.gz
 *.png
 *.nb
+*.json
+*.csv
