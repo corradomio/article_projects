@@ -39,5 +39,4 @@ Hyperparameter Optimization: 10 Top Python Libraries
     Talos
 
 
-
 https://medium.com/@okanyenigun/step-by-step-guide-to-bayesian-optimization-a-python-based-approach-3558985c6818

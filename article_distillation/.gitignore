@@ -1,3 +1,10 @@
 *.json
 skopt
 bayes_opt
+*.Z
+*.zip
+*.gz
+*.data
+*.test
+*.names
+Index
