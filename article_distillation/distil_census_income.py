@@ -1,10 +1,11 @@
-import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
-from timing import tprint
+
 import jsonx as jsx
 import pandasx as pdx
+from common import *
 from skopt import gp_minimize
+from timing import tprint
 
 
 # from category_encoders import OneHotEncoder
@@ -22,12 +23,13 @@ def load_data():
     return X, y
 
 
-def reshape(l: list[str], columns: list[str]):
-    m = len(columns)
-    M = []
-    for i in range(0, len(l), m):
-        M.append(l[i:i+m])
-    return pd.DataFrame(data=M, columns=columns)
+# def reshape(l: list[str], columns: list[str]):
+#     m = len(columns)
+#     M = []
+#     for i in range(0, len(l), m):
+#         M.append(l[i:i+m])
+#     return pd.DataFrame(data=M, columns=columns)
+
 
 
 class TargetFunction:
@@ -63,7 +65,9 @@ class TargetFunction:
         self.best_params = None
         self.best_iter = 0
         self.maximize = maximize
-        self.iter = 1
+        self.score_history = []
+        self.best_score_history = []
+        self.start_time = datetime.now()
 
     def create_classifier(self, X, y):
         Xenc = self.xenc.transform(X)
@@ -90,25 +94,35 @@ class TargetFunction:
         y_pred = model.predict(self.X_true)
 
         score = accuracy_score(y_true, y_pred)
+        self.score_history.append(score)
+        iter = len(self.score_history)
 
         if score > self.best_score:
             self.best_score = score
             self.best_model = model
             self.best_params = (X, y)
-            self.best_iter = self.iter
-            tprint(f"[{self.iter:2}] Best score: {score}")
+            self.best_iter = iter
+            tprint(f"[{iter:2}] Best score: {score}")
+            self.best_score_history.append({"iter": iter, "score": score})
         else:
-            tprint(f"[{self.iter:2}] .... score: {score}")
+            tprint(f"[{iter:2}] .... score: {score}")
 
-        self.iter += 1
         return score if self.maximize else (1-score)
 
     def save(self, fname):
         df = pd.concat(self.best_params, axis=1)
         pdx.save(df, fname + ".csv", index=False)
         jsx.save({
-            "best_score": self.best_score,
-            "best_iter": self.best_iter,
+            "n_iter": len(self.score_history),
+            "n_points": len(self.X),
+            "n_distilled_points": self.D,
+            "n_features": self.M,
+            "n_targets": self.y.shape[1],
+            "classifier": self.best_model.__class__.__name__,
+            "execution_time": delta_time(self.start_time, datetime.now()),
+            "best_score": {"iter": self.best_iter, "score": self.best_score},
+            "score_history": self.score_history,
+            "best_score_history": self.best_score_history
         }, fname + ".json")
         pass
 # end
@@ -155,7 +169,7 @@ def main():
         acq_func="LCB",
         acq_optimizer="auto",
         n_random_starts=5,
-        n_calls=6,
+        n_calls=20,
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
@@ -163,10 +177,10 @@ def main():
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
-        verbose=True
+        verbose=False
     )
 
-    target_function.save("adult-distilled.csv")
+    target_function.save("census_income-distilled")
 
     pass
 
