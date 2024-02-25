@@ -1,10 +1,16 @@
+import numpy as np
 import pandas as pd
-import pandasx as pdx
-from random import choice
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.tree import DecisionTreeClassifier
+
+import jsonx as jsx
+import pandasx as pdx
+from pandasx.preprocessing import BinHotEncoder
 from skopt import gp_minimize
-from category_encoders import OneHotEncoder
+from timing import tprint
+
+
+# from category_encoders import OneHotEncoder
 
 
 def load_data():
@@ -42,13 +48,13 @@ class TargetFunction:
 
     def __init__(self, data, D, maximize=True):
         X, y = data
-        self.X = X
-        self.y = y
+        self.X = X  # features
+        self.y = y  # target
         self.D = D  # n of distilled points
-        self.M = X.shape[1]
+        self.M = X.shape[1] # n of features
 
-        self.xenc = OneHotEncoder().fit(X)
-        self.yenc = OneHotEncoder().fit(y)
+        self.xenc = BinHotEncoder().fit(X)
+        self.yenc = BinHotEncoder().fit(y)
 
         self.X_true = self.xenc.transform(X)
         self.y_true = self.yenc.transform(y)
@@ -60,7 +66,9 @@ class TargetFunction:
         self.best_score = float('-inf') if maximize else float('inf')
         self.best_model = None
         self.best_params = None
+        self.best_iter = 0
         self.maximize = maximize
+        self.iter = 1
 
     def create_classifier(self, X, y):
         Xenc = self.xenc.transform(X)
@@ -73,11 +81,15 @@ class TargetFunction:
     def create_labels(self, X):
         Xenc = self.xenc.transform(X)
         yenc = self.GTC.predict(Xenc)
+        yenc = self.make_target(yenc)
         y = self.yenc.inverse_transform(yenc)
         return y
 
-    def predict(self, c, X):
-        Xenc = self.xenc.transform(X)
+    def make_target(self, y):
+        if isinstance(y, np.ndarray):
+            columns = self.y.columns
+            y = pd.DataFrame(data=y.reshape(-1, len(columns)), columns=columns)
+        return y
 
     def __call__(self, *args, **kwargs):
         X = reshape(*args, self.X.columns)
@@ -94,9 +106,23 @@ class TargetFunction:
             self.best_score = score
             self.best_model = model
             self.best_params = (X, y)
-            print(f"Best score: {score}")
+            self.best_iter = self.iter
+            tprint(f"[{self.iter:2}] Best score: {score}")
+        else:
+            tprint(f"[{self.iter:2}] ____ score: {score}")
 
+        self.iter += 1
         return score if self.maximize else (1-score)
+
+    def save(self, fname):
+        df = pd.concat(self.best_params, axis=1)
+        pdx.save(df, fname+".csv", index=False)
+        jsx.save({
+            "best_score": self.best_score,
+            "best_iter": self.best_iter,
+        }, fname+".json")
+        pass
+# end
 
 
 class Parameters:
@@ -111,12 +137,15 @@ class Parameters:
     def bounds(self):
         columns_range = self.column_ranges
         D = self.D
-        return [columns_range[col] for i in range(D) for col in self.columns]
+        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
+        return bounds
 
     def x0(self):
         columns_range = self.column_ranges
         D = self.D
-        return [choice(columns_range[col]) for i in range(D) for col in self.columns]
+        x0 = [columns_range[col].random() for i in range(D) for col in self.columns]
+        return x0
+# end
 
 
 def main():
@@ -136,8 +165,8 @@ def main():
         y0=None,
         acq_func="LCB",
         acq_optimizer="auto",
-        n_calls=15,
         n_random_starts=5,
+        n_calls=20,
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
@@ -145,8 +174,10 @@ def main():
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
-        verbose=True
+        verbose=False
     )
+
+    target_function.save("mushroom-distilled")
 
     pass
 

@@ -1,9 +1,12 @@
 import pandas as pd
-import pandasx as pdx
-from random import choice
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.tree import DecisionTreeClassifier
+from timing import tprint
+import jsonx as jsx
+import pandasx as pdx
 from skopt import gp_minimize
+
+
 # from category_encoders import OneHotEncoder
 
 
@@ -58,7 +61,9 @@ class TargetFunction:
         self.best_score = float('-inf') if maximize else float('inf')
         self.best_model = None
         self.best_params = None
+        self.best_iter = 0
         self.maximize = maximize
+        self.iter = 1
 
     def create_classifier(self, X, y):
         Xenc = self.xenc.transform(X)
@@ -75,9 +80,6 @@ class TargetFunction:
         y = self.yenc.inverse_transform(yenc)
         return y
 
-    def predict(self, c, X):
-        Xenc = self.xenc.transform(X)
-
     def __call__(self, *args, **kwargs):
         X = reshape(*args, self.X.columns)
         y = self.create_labels(X)
@@ -93,9 +95,23 @@ class TargetFunction:
             self.best_score = score
             self.best_model = model
             self.best_params = (X, y)
-            print(f"Best score: {score}")
+            self.best_iter = self.iter
+            tprint(f"[{self.iter:2}] Best score: {score}")
+        else:
+            tprint(f"[{self.iter:2}] ____ score: {score}")
 
+        self.iter += 1
         return score if self.maximize else (1-score)
+
+    def save(self, fname):
+        df = pd.concat(self.best_params, axis=1)
+        pdx.save(df, fname + ".csv", index=False)
+        jsx.save({
+            "best_score": self.best_score,
+            "best_iter": self.best_iter,
+        }, fname + ".json")
+        pass
+# end
 
 
 class Parameters:
@@ -110,12 +126,15 @@ class Parameters:
     def bounds(self):
         columns_range = self.column_ranges
         D = self.D
-        return [columns_range[col].bound() for i in range(D) for col in self.columns]
+        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
+        return bounds
 
     def x0(self):
         columns_range = self.column_ranges
         D = self.D
-        return [columns_range[col].random() for i in range(D) for col in self.columns]
+        x0 = [columns_range[col].random() for i in range(D) for col in self.columns]
+        return x0
+# end
 
 
 def main():
@@ -135,8 +154,8 @@ def main():
         y0=None,
         acq_func="LCB",
         acq_optimizer="auto",
-        n_calls=15,
         n_random_starts=5,
+        n_calls=6,
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
@@ -146,6 +165,8 @@ def main():
         initial_point_generator="random",
         verbose=True
     )
+
+    target_function.save("adult-distilled.csv")
 
     pass
 
