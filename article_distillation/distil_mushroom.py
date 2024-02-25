@@ -109,7 +109,7 @@ class TargetFunction:
             self.best_iter = self.iter
             tprint(f"[{self.iter:2}] Best score: {score}")
         else:
-            tprint(f"[{self.iter:2}] ____ score: {score}")
+            tprint(f"[{self.iter:2}] .... score: {score}")
 
         self.iter += 1
         return score if self.maximize else (1-score)
