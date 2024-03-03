@@ -29,7 +29,7 @@ sklearn-pandas
 sktime
 
 # https://github.com/scikit-learn-contrib/category_encoders
-category_encoders
+#category_encoders
 
 # https://scikit-optimize.github.io/stable/
 #scikit-optimize
