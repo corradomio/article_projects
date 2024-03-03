@@ -1,3 +1,5 @@
+from typing import Optional
+
 import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
@@ -43,11 +45,40 @@ class Parameters:
         # categorical values
         self.column_ranges = pdx.columns_range(X)
 
-    def bounds(self):
+    def bounds(self, n:Optional[int]=None):
+        """
+        :param n: number of continuous values to consider
+        """
         columns_range = self.column_ranges
         D = self.D
-        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
+        bounds = [columns_range[col].bounds(n) for i in range(D) for col in self.columns]
         return bounds
+
+    def grid_params(self, n:Optional[int]=None):
+        gparams = {}
+        columns_range = self.column_ranges
+        D = self.D
+        for i in range(D):
+            for col in self.columns:
+                name = col.replace("-", "_")
+                param = f"{name}_{i:02}"
+                gparams[param] = columns_range[col].bounds(n)
+            # end
+        # end
+        return gparams
+
+    def grid_values(self):
+        gvalues = {}
+        columns_range = self.column_ranges
+        D = self.D
+        for i in range(D):
+            for col in self.columns:
+                name = col.replace("-", "_")
+                param = f"{name}_{i:02}"
+                gvalues[param] = columns_range[col].random()
+            # end
+        # end
+        return gvalues
 
     def x0(self):
         columns_range = self.column_ranges
@@ -98,6 +129,8 @@ def nameof(s: str) -> str:
 class BaseTargetFunction:
     def __init__(self, data, D, parameters=None, maximize=True):
         X, y = data
+
+        self.data = data
         self.X = X  # features
         self.y = y  # target
         self.D = D  # n of distilled points

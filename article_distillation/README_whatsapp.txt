@@ -213,3 +213,18 @@ Comunque le fluttuazioni durante l'exploitatoon sono fisiologiche e non me ne pr
 Deadline della specia issue estesa:
 Full paper submission deadline: Extended to March 18, 2024
 
+----
+
+Devo studiare meglio come "comandare" l'ottimizzatore: ci dovrebbero essere solo 2 parametri su cui agire:
+
+
+    kappa : float, default: 1.96
+        Controls how much of the variance in the predicted values should be
+        taken into account. If set to be very high, then we are favouring
+        exploration over exploitation and vice versa.
+        Used when the acquisition is "LCB".
+
+    xi : float, default: 0.01
+        Controls how much improvement one wants over the previous best
+        values. Used when the acquisition is either "EI" or "PI".
+

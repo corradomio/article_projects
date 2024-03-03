@@ -127,8 +127,8 @@ class TargetFunction(BaseTargetFunction):
 
 
 def main():
-    path("results").mkdir_p()
-    path("plots").mkdir_p()
+    path("results/bo").mkdir_p()
+    path("plots/bo").mkdir_p()
 
     data = load_data()
 
@@ -160,8 +160,8 @@ def main():
                                 # to speedup the analysis
     )
 
-    target_function.save(f"results/mushroom-distilled-{D}")
-    target_function.plot(f"plots/mushroom-distilled-{D}")
+    target_function.save(f"results/bo/mushroom-distilled")
+    target_function.plot(f"plots/bo/mushroom-distilled")
 
     pass
 # end

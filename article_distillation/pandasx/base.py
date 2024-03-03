@@ -9,6 +9,7 @@ import pandas as pd
 from typing import Union, Optional, Collection
 from pandas import CategoricalDtype
 from stdlib import NoneType, CollectionType, as_list, as_tuple, is_instance
+from stdlib import lrange
 
 __all__ = [
     # "find_binary",
@@ -569,7 +570,7 @@ class Values:
     def __init__(self):
         pass
 
-    def bounds(self):
+    def bounds(self, n: Optional[int]=None):
         ...
 
     def random(self):
@@ -586,8 +587,18 @@ class RangeValues(Values):
         self.maxv = maxv
         self.dist = distance
 
-    def bounds(self):
-        return (self.minv, self.maxv)
+    def bounds(self, n=None):
+        if n is None:
+            return (self.minv, self.maxv)
+        else:
+            values = []
+            step = (self.maxv-self.minv)/(n-1)
+            v = self.minv
+            vlim = self.maxv+step/2
+            while v < vlim:
+                values.append(v)
+                v += step
+            return values
 
     def random(self):
         return random.uniform(self.minv, self.maxv)
@@ -601,7 +612,7 @@ class ListValues(Values):
         super().__init__()
         self.values = list(values)
 
-    def bounds(self):
+    def bounds(self, n=None):
         return self.values
 
     def random(self):

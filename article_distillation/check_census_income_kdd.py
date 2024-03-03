@@ -1,8 +1,8 @@
-import pandas as pd
-import pandasx as pdx
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
-from timing import tprint
+from sklearn.tree import DecisionTreeClassifier
+
+import pandasx as pdx
+from stdlib.timing import tprint
 
 
 def main():

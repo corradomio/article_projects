@@ -98,12 +98,12 @@ class TargetFunction(BaseTargetFunction):
 
 
 def main():
-    path("results").mkdir_p()
-    path("plots").mkdir_p()
+    path("results/bo").mkdir_p()
+    path("plots/bo").mkdir_p()
 
     data = load_data()
 
-    D = 25
+    D = 100
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D, parameters=None)
 
@@ -131,8 +131,8 @@ def main():
                                 # to speedup the analysis
     )
 
-    target_function.save(f"results/census_income-distilled")
-    target_function.plot(f"plots/census_income-distilled")
+    target_function.save(f"results/bo/census_income-distilled")
+    target_function.plot(f"plots/bo/census_income-distilled")
 
     pass
 # end
