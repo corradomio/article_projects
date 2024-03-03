@@ -1,10 +1,9 @@
 # WARNING: DOESN'T remove 'DataFrame'
-from pandas import DataFrame, DatetimeIndex, TimedeltaIndex, PeriodIndex, MultiIndex
+from pandas import DatetimeIndex, TimedeltaIndex, PeriodIndex, MultiIndex
 from pandas._typing import *
 
 from stdlib import as_list, kwval
 from .base import groups_split, groups_merge, index_split, index_merge
-
 
 # ---------------------------------------------------------------------------
 # pandas resample

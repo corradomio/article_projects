@@ -2,7 +2,7 @@ from .base import *
 from .io import read_data, write_data, save, load
 from .cat import unique_values
 from .missing import nan_replace
-from .preprocessing import *
+# from .preprocessing import *
 from .periodic import periodic_encode, set_datetime_index, last_week_in_month
 from .freq import infer_freq, FREQUENCIES
 from .onehot import onehot_encode
