@@ -152,3 +152,64 @@ selection and hyperparameter optimization in AutoML. Lì si che avremmo ragione 
 ----
 
 Distanza categorica: 
+
+----
+In entrambi i casi, con il decision tree, vedo che con 20 iterazioni si passa da migliaia (mi pare di ricordare) di 
+record a 100, e con uno score (forse accuratezza) dell' 80% e 97% rispettivamente. Mi sembra incoraggiante e ho 
+chiesto un'estensione a Malerba. 
+Vedo due direzioni in cui muoverci: 1. arricchire la caratterizzazione e 2. confrontare con technique alternative. 
+- Per la prima cosa si può prendere un modello più ricco, tipo random forest che ha più parametri, esplorare un 
+numero più alto di iterazioni e caratterizzare la dipendenza dello score dal numero di punti (scendendo gradualmente 
+da 100 fino ad un numero di 10 punti, per stressare al massimo il sistema).
+- Per la seconda cosa, si possono usare anche solo delle baseline: io penso alla ricerca nello spazio dei parametri 
+con random search e gridsearch, ma se si può anche il metodo dei centroidi (K-center) ci starebeb bene.
+
+[cm]
+
+Quello che non mi convince e' lo scor alto fin dall'inizio. 
+Come acciderbolina fa ad avere uno score alto partendo da dei punti casuali. Boh!
+Devo investigare
+
+[gg]
+
+Si hai ragione, se è alto con 100 può darsi che la sfida facile con quella numerosità; scendere più essere 
+interessante.
+
+il papiro originale della condensation, che usava le imagini del MNIST era sceso a 10
+
+riguardo al secondo punto, se ci sarà tempo, un altro temine di paragone è: embedding del discreto in una varietà 
++ ricerca sul continuo di quella varietà: siccome l'embedding ha un costo proporzionale al numero di punti se non 
+al suo quadrato, la nostra Bayesian Optimization dovrebbe esser competitiva.
+
+Se la dimensionalità è alta, 100 punti non sembrerebbero tanti. E a maggior ragione ottenere un'accuracy alta sin 
+dalle primissime iterazioni sembra notevole
+
+Sì un po'. I numeri accuracy così variabili tra le iterazioni
+
+È che ad ogni iterazione privilegi l'exploration almeno all' inizio. Se privilegiassi l'exploitation ci sarebbe 
+tipicamente un non peggioramento.
+
+[cm]
+Devo studiare meglio come "comandare" l'ottimizzatore: ci dovrebbero essere solo 2 parametri su cui agire:
+
+
+    kappa : float, default: 1.96
+        Controls how much of the variance in the predicted values should be
+        taken into account. If set to be very high, then we are favouring
+        exploration over exploitation and vice versa.
+        Used when the acquisition is "LCB".
+
+    xi : float, default: 0.01
+        Controls how much improvement one wants over the previous best
+        values. Used when the acquisition is either "EI" or "PI".
+
+
+[gg]
+Il secondo è chiaro. Tu starai usando Expected Improvement. Quindi il primo parametro, che è il tipico valore 
+per avere un intervallo di confidenza del 95% non è in gioco.
+
+Comunque le fluttuazioni durante l'exploitatoon sono fisiologiche e non me ne preoccuperei.
+
+Deadline della specia issue estesa:
+Full paper submission deadline: Extended to March 18, 2024
+
