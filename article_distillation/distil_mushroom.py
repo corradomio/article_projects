@@ -120,6 +120,9 @@ class TargetFunction(BaseTargetFunction):
 
     def save(self, fname):
         super().save(fname)
+
+    def plot(self, fname):
+        super().plot(fname)
 # end
 
 
@@ -129,7 +132,7 @@ def main():
 
     data = load_data()
 
-    D = 50
+    D = 100
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D, parameters=None)
 
@@ -161,6 +164,7 @@ def main():
     target_function.plot(f"plots/mushroom-distilled-{D}")
 
     pass
+# end
 
 
 if __name__ == '__main__':

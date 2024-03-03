@@ -91,6 +91,9 @@ class TargetFunction(BaseTargetFunction):
 
     def save(self, fname):
         super().save(fname)
+
+    def plot(self, fname):
+        super().plot(fname)
 # end
 
 
@@ -100,7 +103,7 @@ def main():
 
     data = load_data()
 
-    D = 50
+    D = 25
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D, parameters=None)
 
@@ -128,10 +131,11 @@ def main():
                                 # to speedup the analysis
     )
 
-    target_function.save(f"results/census_income-distilled-{D}")
-    target_function.plot(f"plots/census_income-distilled-{D}")
+    target_function.save(f"results/census_income-distilled")
+    target_function.plot(f"plots/census_income-distilled")
 
     pass
+# end
 
 
 if __name__ == '__main__':

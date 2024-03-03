@@ -137,9 +137,10 @@ class BaseTargetFunction:
     def save(self, fname):
         self.done_time = datetime.now()
 
+        D = self.D
         date_ext = self.start_time.strftime("%Y%m%d.%H%M%S")
-        cname = f"{fname}-{date_ext}.csv"
-        jname = f"{fname}-{date_ext}.json"
+        cname = f"{fname}-{D}-{date_ext}.csv"
+        jname = f"{fname}-{D}-{date_ext}.json"
 
         df = pd.concat(self.best_params, axis=1)
         pdx.save(df, cname, index=False)
@@ -163,6 +164,7 @@ class BaseTargetFunction:
         pass
 
     def plot(self, fname):
+        D = self.D
         name = nameof(fname)
 
         plt.clf()
@@ -180,10 +182,10 @@ class BaseTargetFunction:
         plt.ylim((0, 1))
         plt.xlabel("iterations")
         plt.ylabel("accuracy")
-        plt.title(f"Accuracy vs iterations {name}")
+        plt.title(f"{name}, {D} points")
 
         date_ext = self.start_time.strftime("%Y%m%d.%H%M%S")
-        pname = f"{fname}-{date_ext}.png"
+        pname = f"{fname}-{D}-{date_ext}.png"
 
         plt.savefig(pname, dpi=300)
 # end
