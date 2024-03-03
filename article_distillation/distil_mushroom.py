@@ -2,8 +2,6 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
-import jsonx as jsx
-import pandasx as pdx
 from common import *
 from pandasx.preprocessing import BinHotEncoder
 from skopt import gp_minimize
@@ -36,14 +34,13 @@ def load_data():
     return X, y
 
 
-class TargetFunction:
+class TargetFunction(BaseTargetFunction):
 
     def __init__(self, data, D, maximize=True):
-        X, y = data
-        self.X = X  # features
-        self.y = y  # target
-        self.D = D  # n of distilled points
-        self.M = X.shape[1] # n of features
+        super().__init__(data, D, maximize)
+
+        X = self.X
+        y = self.y
 
         self.xenc = BinHotEncoder().fit(X)
         self.yenc = BinHotEncoder().fit(y)
@@ -53,16 +50,7 @@ class TargetFunction:
 
         # create the Ground Truth classifier
         self.GTC = self.create_classifier(X, y)
-
-        # best results
-        self.best_score = float('-inf') if maximize else float('inf')
-        self.best_model = None
-        self.best_params = None
-        self.best_iter = 0
-        self.maximize = maximize
-        self.score_history = []
-        self.best_score_history = []
-        self.start_time = datetime.now()
+    # end
 
     def create_classifier(self, X, y):
         Xenc = self.xenc.transform(X)
@@ -111,20 +99,7 @@ class TargetFunction:
         return score if self.maximize else (1-score)
 
     def save(self, fname):
-        df = pd.concat(self.best_params, axis=1)
-        pdx.save(df, fname+".csv", index=False)
-        jsx.save({
-            "n_iter": len(self.score_history),
-            "n_distilled_points": self.D,
-            "n_features": self.M,
-            "n_targets": self.y.shape[1],
-            "classifier": self.best_model.__class__.__name__,
-            "execution_time": delta_time(self.start_time, datetime.now()),
-            "best_score": {"iter": self.best_iter, "score": self.best_score},
-            "score_history": self.score_history,
-            "best_score_history": self.best_score_history
-        }, fname+".json")
-        pass
+        super().save(fname)
 # end
 
 
@@ -178,10 +153,11 @@ def main():
         noise="gaussian",
         initial_point_generator="random",
         verbose=False,
-        n_jobs=8                # n of
+        n_jobs=8                # n of python processes to use
+                                # to speedup the analysis
     )
 
-    target_function.save("mushroom-distilled")
+    target_function.save(f"mushroom-distilled-{D}")
 
     pass
 

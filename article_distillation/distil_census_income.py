@@ -1,8 +1,6 @@
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
-import jsonx as jsx
-import pandasx as pdx
 from common import *
 from skopt import gp_minimize
 from stdlib.timing import tprint
@@ -23,16 +21,7 @@ def load_data():
     return X, y
 
 
-# def reshape(l: list[str], columns: list[str]):
-#     m = len(columns)
-#     M = []
-#     for i in range(0, len(l), m):
-#         M.append(l[i:i+m])
-#     return pd.DataFrame(data=M, columns=columns)
-
-
-
-class TargetFunction:
+class TargetFunction(BaseTargetFunction):
     NUMERIC = ['age', 'fnlwgt', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']
     ONEHOT = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex',
               'native-country',
@@ -41,11 +30,10 @@ class TargetFunction:
     TARGET = 'income'
 
     def __init__(self, data, D, maximize=True):
-        X, y = data
-        self.X = X
-        self.y = y
-        self.D = D  # n of distilled points
-        self.M = X.shape[1]
+        super().__init__(data, D, maximize=maximize)
+
+        X = self.X
+        y = self.y
 
         self.xenc = pdx.SequenceEncoder([
             pdx.BinHotEncoder(columns=self.ONEHOT),
@@ -108,23 +96,10 @@ class TargetFunction:
             tprint(f"[{iter:2}] .... score: {score}")
 
         return score if self.maximize else (1-score)
+    # end
 
     def save(self, fname):
-        df = pd.concat(self.best_params, axis=1)
-        pdx.save(df, fname + ".csv", index=False)
-        jsx.save({
-            "n_iter": len(self.score_history),
-            "n_points": len(self.X),
-            "n_distilled_points": self.D,
-            "n_features": self.M,
-            "n_targets": self.y.shape[1],
-            "classifier": self.best_model.__class__.__name__,
-            "execution_time": delta_time(self.start_time, datetime.now()),
-            "best_score": {"iter": self.best_iter, "score": self.best_score},
-            "score_history": self.score_history,
-            "best_score_history": self.best_score_history
-        }, fname + ".json")
-        pass
+        super().save(fname)
 # end
 
 
@@ -169,7 +144,7 @@ def main():
         acq_func="LCB",
         acq_optimizer="auto",
         n_random_starts=5,
-        n_calls=20,
+        n_calls=100,
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
@@ -178,10 +153,11 @@ def main():
         noise="gaussian",
         initial_point_generator="random",
         verbose=False,
-        n_jobs=8
+        n_jobs=8                # n of python processes to use
+                                # to speedup the analysis
     )
 
-    target_function.save("census_income-distilled")
+    target_function.save(f"census_income-distilled-{D}")
 
     pass
 

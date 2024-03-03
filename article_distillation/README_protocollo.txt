@@ -1,3 +1,74 @@
+-----------------------------------------------------------------------------
+- Protocollo v2
+-----------------------------------------------------------------------------
+
+Protocollo da applicare a dataset contenenti valori categorici.
+Sono usati 2 dataset:
+
+    mushroom:       SOLO categorici
+    census_income:  categorici E numerici
+
+
+--
+Poiche' l'obbiettivo e' generare un dataset di valori sintetici,
+NON SERVE suddividere i dataset originale in train/test!
+
+Il protocollo e' il seguente:
+
+    1) usando TUTTO il dataset originale, fare il training di un classificatore
+       che chiameremo GTC (Ground Truth Classifier)
+
+    2) generare D punti le cui coordinate sono scelte in questo modo
+
+        - coordinata categorica: valore categorico scelto random con
+          distrib uniforme
+        - cordinata numerica:    valore random con distrib uniforme
+          in range [min, max]
+
+    3) usare il GTC per assegnare la label ai D punti
+
+    4) addestrare un classificatore con i D punti, che chiameremo DC
+       (Distilled Classifier)
+
+    5) usando DC, predire le label del dataset originale
+
+    6) calcolare l'accuracy della predizione.
+       Questo e' il valore da ottimizzare:
+
+            MASSIMIZZARE l'accuracy
+
+
+I parametri dell'ottimizzatore solo le coordinate dei D punti.
+Se ci sono M coordinate, il numero di parametri dell'ottimizzatore sono
+
+    D*M
+
+L'ottimizzatore deve poter ottenere un certo numero di parametri (diciamo K)
+generati in modo random, poiche' sono i punti dello spazio D*M da cui partire.
+Per fare questo gli servono le informazioni su quale possa essere il range di
+valori da cui ottenere i valori iniziali. La libreria supporta al minimo:
+
+    1) list[str|int]: valore categorico
+    2) (min, max)   : valore continuo
+
+
+
+
+
+-----------------------------------------------------------------------------
+- Protocollo v2
+-----------------------------------------------------------------------------
+
+WARNING: vecchio protocollo usato con il dataset
+
+    Cubo di Rubik in N dimensioni
+
+-----------------------------------------------------------------------------
+
+Protocollo da applicare a dataset contenente SOLO valori numerici in range
+predefinito. In questo caso [0,1].
+
+
 Supponiamo un problema di classificazione binaria (con valori {0,1})
 
 Sia X una matrice NxM con valori reali in [0,1]. 
