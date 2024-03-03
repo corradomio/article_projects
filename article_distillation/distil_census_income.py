@@ -5,7 +5,7 @@ import jsonx as jsx
 import pandasx as pdx
 from common import *
 from skopt import gp_minimize
-from timing import tprint
+from stdlib.timing import tprint
 
 
 # from category_encoders import OneHotEncoder

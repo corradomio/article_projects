@@ -149,3 +149,6 @@ prevalentemente expoitation, invece la BO introduce l'esploration e questo può 
 Però il passo notevole sarebbe applicarla a problemi con un spazio di feature categoriche. Come capita per la model
 selection and hyperparameter optimization in AutoML. Lì si che avremmo ragione ad invocare questo approccio!
 
+----
+
+Distanza categorica: 

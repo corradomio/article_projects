@@ -7,7 +7,7 @@ import pandasx as pdx
 from common import *
 from pandasx.preprocessing import BinHotEncoder
 from skopt import gp_minimize
-from timing import tprint
+from stdlib.timing import tprint
 
 
 # from category_encoders import OneHotEncoder
