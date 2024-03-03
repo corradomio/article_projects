@@ -1,5 +1,5 @@
 # WARNING: DOESN'T remove 'DataFrame'
-from pandas import DatetimeIndex, TimedeltaIndex, PeriodIndex, MultiIndex
+from pandas import DatetimeIndex, TimedeltaIndex, PeriodIndex, MultiIndex, DataFrame
 from pandas._typing import *
 
 from stdlib import as_list, kwval

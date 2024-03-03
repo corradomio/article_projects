@@ -169,7 +169,7 @@ def main():
         acq_func="LCB",
         acq_optimizer="auto",
         n_random_starts=5,
-        n_calls=20,
+        n_calls=100,
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
@@ -177,7 +177,8 @@ def main():
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
-        verbose=False
+        verbose=False,
+        n_jobs=8                # n of
     )
 
     target_function.save("mushroom-distilled")

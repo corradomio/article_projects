@@ -177,7 +177,8 @@ def main():
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
-        verbose=False
+        verbose=False,
+        n_jobs=8
     )
 
     target_function.save("census_income-distilled")
