@@ -1,0 +1,52 @@
+# https://path.readthedocs.io/en/latest/
+path
+
+# https://matplotlib.org/
+matplotlib
+
+# https://seaborn.pydata.org/
+seaborn
+
+# https://numpy.org/
+numpy
+
+# https://scipy.org/
+scipy
+
+# https://pandas.pydata.org/
+pandas
+
+# https://scikit-learn.org
+scikit-learn
+
+# https://scikit-image.org/
+scikit-image
+
+# https://github.com/scikit-learn-contrib/sklearn-pandas
+sklearn-pandas
+
+# https://sktime.org/
+sktime
+
+# https://github.com/scikit-learn-contrib/category_encoders
+category_encoders
+
+# https://scikit-optimize.github.io/stable/
+#scikit-optimize
+
+# https://xgboost.readthedocs.io/en/stable/
+xgboost
+
+# https://catboost.ai/
+catboost
+
+# https://github.com/eamid/trimap
+# trimap isa based on annoy (https://github.com/spotify/annoy)
+# can be downloaded from https://www.lfd.uci.edu/~gohlke/pythonlibs/#annoy
+trimap
+
+# https://umap-learn.readthedocs.io/en/latest/
+umap-learn
+
+# https://pypi.org/project/PyYAML/
+#PyYAML
