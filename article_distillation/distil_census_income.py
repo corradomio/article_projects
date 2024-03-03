@@ -1,6 +1,7 @@
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
+from path import Path as path
 from common import *
 from skopt import gp_minimize
 from stdlib.timing import tprint
@@ -46,16 +47,6 @@ class TargetFunction(BaseTargetFunction):
 
         # create the Ground Truth classifier
         self.GTC = self.create_classifier(X, y)
-
-        # best results
-        self.best_score = float('-inf') if maximize else float('inf')
-        self.best_model = None
-        self.best_params = None
-        self.best_iter = 0
-        self.maximize = maximize
-        self.score_history = []
-        self.best_score_history = []
-        self.start_time = datetime.now()
 
     def create_classifier(self, X, y):
         Xenc = self.xenc.transform(X)
@@ -104,9 +95,12 @@ class TargetFunction(BaseTargetFunction):
 
 
 def main():
+    path("results").mkdir_p()
+    path("plots").mkdir_p()
+
     data = load_data()
 
-    D = 100
+    D = 50
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D, parameters=None)
 
@@ -125,7 +119,7 @@ def main():
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
-        random_state=777,
+        # random_state=777,
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
@@ -134,7 +128,8 @@ def main():
                                 # to speedup the analysis
     )
 
-    target_function.save(f"census_income-distilled-{D}")
+    target_function.save(f"results/census_income-distilled-{D}")
+    target_function.plot(f"plots/census_income-distilled-{D}")
 
     pass
 

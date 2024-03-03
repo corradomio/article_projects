@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
+from path import Path as path
 from common import *
 from pandasx.preprocessing import BinHotEncoder
 from skopt import gp_minimize
@@ -123,9 +124,12 @@ class TargetFunction(BaseTargetFunction):
 
 
 def main():
+    path("results").mkdir_p()
+    path("plots").mkdir_p()
+
     data = load_data()
 
-    D = 100
+    D = 50
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D, parameters=None)
 
@@ -144,7 +148,7 @@ def main():
         n_initial_points=10,
         n_points=1000,
         n_restarts_optimizer=5,
-        random_state=777,
+        # random_state=777,
         xi=0.01, kappa=1.96,
         noise="gaussian",
         initial_point_generator="random",
@@ -153,7 +157,8 @@ def main():
                                 # to speedup the analysis
     )
 
-    target_function.save(f"mushroom-distilled-{D}")
+    target_function.save(f"results/mushroom-distilled-{D}")
+    target_function.plot(f"plots/mushroom-distilled-{D}")
 
     pass
 

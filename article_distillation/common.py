@@ -1,7 +1,35 @@
+import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
 import pandasx as pdx
 import jsonx as jsx
+from stdlib import lrange
+
+
+def reshape(l: list[str], columns: list[str]):
+    m = len(columns)
+    M = []
+    for i in range(0, len(l), m):
+        M.append(l[i:i+m])
+    return pd.DataFrame(data=M, columns=columns)
+# end
+
+
+def delta_time(start: datetime, done: datetime):
+    seconds = int((done - start).total_seconds())
+    if seconds < 60:
+        return f"{seconds} s"
+    elif seconds < 3600:
+        s = seconds % 60
+        m = seconds // 60
+        return f"{m:02}:{s:02} s"
+    else:
+        s = seconds % 60
+        seconds = seconds // 60
+        m = seconds % 60
+        h = seconds // 60
+        return f"{h:02}:{m:02}:{s:02} s"
+# end
 
 
 class Parameters:
@@ -53,10 +81,19 @@ class Parameters:
             dist += columns_range[col].distance(c1, c2)
         return dist
     # end
-
-
 # end
 
+
+def nameof(s: str) -> str:
+    p = s.find('\\')
+    if p == -1:
+        p = s.find('/')
+    if p != -1:
+        s = s[p+1:]
+    p = s.find('-')
+    if p != -1:
+        s = s[:p]
+    return s
 
 class BaseTargetFunction:
     def __init__(self, data, D, parameters=None, maximize=True):
@@ -82,6 +119,7 @@ class BaseTargetFunction:
 
         self.start_time = datetime.now()
         self.done_time = datetime.now()
+
     # end
 
     def create_classifier(self, X, y):
@@ -123,31 +161,29 @@ class BaseTargetFunction:
             "best_score_history": self.best_score_history
         }, jname)
         pass
+
+    def plot(self, fname):
+        name = nameof(fname)
+
+        plt.clf()
+
+        # scores
+        y = self.score_history
+        x = lrange(1, len(y) + 1)
+
+        # best scores
+        bx = [bs['iter'] for bs in self.best_score_history]
+        by = [bs['score'] for bs in self.best_score_history]
+
+        plt.plot(x, y)
+        plt.scatter(bx, by, c="r", s=50)
+        plt.ylim((0, 1))
+        plt.xlabel("iterations")
+        plt.ylabel("accuracy")
+        plt.title(f"Accuracy vs iterations {name}")
+
+        date_ext = self.start_time.strftime("%Y%m%d.%H%M%S")
+        pname = f"{fname}-{date_ext}.png"
+
+        plt.savefig(pname, dpi=300)
 # end
-
-
-def reshape(l: list[str], columns: list[str]):
-    m = len(columns)
-    M = []
-    for i in range(0, len(l), m):
-        M.append(l[i:i+m])
-    return pd.DataFrame(data=M, columns=columns)
-# end
-
-
-def delta_time(start: datetime, done: datetime):
-    seconds = int((done - start).total_seconds())
-    if seconds < 60:
-        return f"{seconds} s"
-    elif seconds < 3600:
-        s = seconds % 60
-        m = seconds // 60
-        return f"{m:02}:{s:02} s"
-    else:
-        s = seconds % 60
-        seconds = seconds // 60
-        m = seconds % 60
-        h = seconds // 60
-        return f"{h:02}:{m:02}:{s:02} s"
-# end
-
