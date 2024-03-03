@@ -29,8 +29,8 @@ class TargetFunction(BaseTargetFunction):
               ]
     TARGET = 'income'
 
-    def __init__(self, data, D, maximize=True):
-        super().__init__(data, D, maximize=maximize)
+    def __init__(self, data, D, parameters=None, maximize=True):
+        super().__init__(data, D, parameters=parameters, maximize=maximize)
 
         X = self.X
         y = self.y
@@ -103,35 +103,12 @@ class TargetFunction(BaseTargetFunction):
 # end
 
 
-class Parameters:
-    def __init__(self, data, D):
-        X, y = data
-        self.D = D
-        # make the columns order 'consistent'
-        self.columns = X.columns
-        # categorical values
-        self.column_ranges = pdx.columns_range(X)
-
-    def bounds(self):
-        columns_range = self.column_ranges
-        D = self.D
-        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
-        return bounds
-
-    def x0(self):
-        columns_range = self.column_ranges
-        D = self.D
-        x0 = [columns_range[col].random() for i in range(D) for col in self.columns]
-        return x0
-# end
-
-
 def main():
     data = load_data()
 
     D = 100
-    target_function = TargetFunction(data, D)
     parameters = Parameters(data, D)
+    target_function = TargetFunction(data, D, parameters=None)
 
     gp_bounds = parameters.bounds()
     gp_x0 = parameters.x0()

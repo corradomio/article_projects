@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
@@ -36,8 +37,8 @@ def load_data():
 
 class TargetFunction(BaseTargetFunction):
 
-    def __init__(self, data, D, maximize=True):
-        super().__init__(data, D, maximize)
+    def __init__(self, data, D, parameters=None, maximize=True):
+        super().__init__(data, D, parameters=parameters, maximize=maximize)
 
         X = self.X
         y = self.y
@@ -74,10 +75,15 @@ class TargetFunction(BaseTargetFunction):
         return y
 
     def __call__(self, *args, **kwargs):
-        X = reshape(*args, self.X.columns)
-        y = self.create_labels(X)
+        # distilled points
+        Xd = reshape(*args, self.X.columns)
 
-        model = self.create_classifier(X, y)
+        if self.parameters is None:
+            yd = self.create_labels(Xd)
+        else:
+            Xd, yd = self.nearest_neighbors(Xd)
+
+        model = self.create_classifier(Xd, yd)
 
         y_true = self.y_true
         y_pred = model.predict(self.X_true)
@@ -89,7 +95,7 @@ class TargetFunction(BaseTargetFunction):
         if score > self.best_score:
             self.best_score = score
             self.best_model = model
-            self.best_params = (X, y)
+            self.best_params = (Xd, yd)
             self.best_iter = iter
             tprint(f"[{iter:2}] Best score: {score}")
             self.best_score_history.append({"iter": iter, "score": score})
@@ -98,31 +104,21 @@ class TargetFunction(BaseTargetFunction):
 
         return score if self.maximize else (1-score)
 
+    def nearest_neighbors(self, Xd) -> tuple[pd.DataFrame, pd.DataFrame]:
+        Xns = []
+        yns = []
+        for i in range(self.D):
+            xd = Xd.iloc[i]
+            xn, yn = self.parameters.xn(xd)
+            Xns.append(xn)
+            yns.append(yn)
+        Xns = pd.DataFrame(data=Xns).reset_index(drop=True)
+        yns = pd.DataFrame(data=yns).reset_index(drop=True)
+        return Xns, yns
+    # end
+
     def save(self, fname):
         super().save(fname)
-# end
-
-
-class Parameters:
-    def __init__(self, data, D):
-        X, y = data
-        self.D = D
-        # make the columns order 'consistent'
-        self.columns = X.columns
-        # categorical values
-        self.column_ranges = pdx.columns_range(X)
-
-    def bounds(self):
-        columns_range = self.column_ranges
-        D = self.D
-        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
-        return bounds
-
-    def x0(self):
-        columns_range = self.column_ranges
-        D = self.D
-        x0 = [columns_range[col].random() for i in range(D) for col in self.columns]
-        return x0
 # end
 
 
@@ -130,8 +126,8 @@ def main():
     data = load_data()
 
     D = 100
-    target_function = TargetFunction(data, D)
     parameters = Parameters(data, D)
+    target_function = TargetFunction(data, D, parameters=None)
 
     gp_bounds = parameters.bounds()
     gp_x0 = parameters.x0()

@@ -565,10 +565,26 @@ def columns_merge(parts: list[pd.DataFrame], sort: Union[None, bool, list[str]] 
 # columns_range
 # ---------------------------------------------------------------------------
 
-class RangeValues:
-    def __init__(self, minv, maxv):
+class Values:
+    def __init__(self):
+        pass
+
+    def bounds(self):
+        ...
+
+    def random(self):
+        ...
+
+    def distance(self, x1, x2) -> float:
+        ...
+
+
+class RangeValues(Values):
+    def __init__(self, minv, maxv, distance=lambda x, y: abs(x - y)):
+        super().__init__()
         self.minv = minv
         self.maxv = maxv
+        self.dist = distance
 
     def bounds(self):
         return (self.minv, self.maxv)
@@ -576,9 +592,13 @@ class RangeValues:
     def random(self):
         return random.uniform(self.minv, self.maxv)
 
+    def distance(self, x1, x2) -> float:
+        return self.dist(x1, x2)
 
-class ListValues:
+
+class ListValues(Values):
     def __init__(self, values):
+        super().__init__()
         self.values = list(values)
 
     def bounds(self):
@@ -586,6 +606,9 @@ class ListValues:
 
     def random(self):
         return random.choice(self.values)
+
+    def distance(self, x1, x2) -> float:
+        return 1 if x1 == x2 else 0
 
 
 def columns_range(df: pd.DataFrame, min_values=128):

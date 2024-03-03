@@ -52,6 +52,24 @@ valori da cui ottenere i valori iniziali. La libreria supporta al minimo:
     2) (min, max)   : valore continuo
 
 
+Estensione
+----------
+
+Il protocollo viene esteso nel seguente modo:
+
+    3') una volta trovati i D punti sintetici,
+       trovate i D punti piu' vicini del dataset originale.
+       Di questi punti si conosce gia' la label. Quindi non serve utilizzare
+       GTC
+
+    4) addestrare un classificatore con i D punti, che chiameremo DC
+       (Distilled Classifier)
+
+    5) usando DC, predire le label del dataset originale
+
+    6) calcolare l'accuracy della predizione.
+       Questo e' il valore da ottimizzare:
+
 
 
 

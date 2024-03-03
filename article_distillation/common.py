@@ -4,13 +4,69 @@ import pandasx as pdx
 import jsonx as jsx
 
 
+class Parameters:
+    def __init__(self, data, D):
+        X, y = data
+        self.X: pd.DataFrame = X
+        self.y: pd.DataFrame = y
+        self.D: int = D
+        # make the columns order 'consistent'
+        self.columns = X.columns
+        # categorical values
+        self.column_ranges = pdx.columns_range(X)
+
+    def bounds(self):
+        columns_range = self.column_ranges
+        D = self.D
+        bounds = [columns_range[col].bounds() for i in range(D) for col in self.columns]
+        return bounds
+
+    def x0(self):
+        columns_range = self.column_ranges
+        D = self.D
+        x0 = [columns_range[col].random() for i in range(D) for col in self.columns]
+        return x0
+
+    def xn(self, x1):
+        """x nearest to x1, and it's label"""
+        min_dist = float("inf")
+        xs = None
+        ys = None
+        n = len(self.X)
+        for i in range(n):
+            x2 = self.X.iloc[i]
+            dist = self.distance(x1, x2)
+            if dist < min_dist:
+                min_dist = dist
+                xs = x2
+                ys = self.y.iloc[i]
+        # end
+        return xs, ys
+
+    def distance(self, x1: pd.Series, x2: pd.Series) -> float:
+        """Distance between two points"""
+        columns_range = self.column_ranges
+        dist = 0
+        for i, col in enumerate(columns_range.keys()):
+            c1 = x1.iloc[i]
+            c2 = x2.iloc[i]
+            dist += columns_range[col].distance(c1, c2)
+        return dist
+    # end
+
+
+# end
+
+
 class BaseTargetFunction:
-    def __init__(self, data, D, maximize=True):
+    def __init__(self, data, D, parameters=None, maximize=True):
         X, y = data
         self.X = X  # features
         self.y = y  # target
         self.D = D  # n of distilled points
         self.M = X.shape[1]  # n of features
+
+        self.parameters = parameters
 
         # Ground Truth Classifier
         self.GTC = None
@@ -41,28 +97,19 @@ class BaseTargetFunction:
         ...
 
     def save(self, fname):
-        def duration():
-            seconds = (self.done_time - self.start_time).total_seconds()
-            if seconds <= 60:
-                return f"{seconds} s"
-            if seconds <= 3600:
-                minutes = seconds // 60;
-                seconds = seconds % 60;
-                return f"{minutes:02}:{seconds:02}"
-            else:
-                hours = seconds // 3600
-                minutes = seconds % 3600 // 60
-                seconds = seconds % 60
-                return f"{hours:02}:{minutes:02}:{seconds:02}"
-        # end
         self.done_time = datetime.now()
 
+        date_ext = self.start_time.strftime("%Y%m%d.%H%M%S")
+        cname = f"{fname}-{date_ext}.csv"
+        jname = f"{fname}-{date_ext}.json"
+
         df = pd.concat(self.best_params, axis=1)
-        pdx.save(df, fname+".csv", index=False)
+        pdx.save(df, cname, index=False)
         jsx.save({
             "start_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
             "done_time": self.done_time.strftime("%Y-%m-%d %H:%M:%S"),
             "execution_time": delta_time(self.start_time, self.done_time),
+            "synthetic_points": self.parameters is None,
 
             "n_iter": len(self.score_history),
             "n_distilled_points": self.D,
@@ -74,9 +121,9 @@ class BaseTargetFunction:
             "best_score": {"iter": self.best_iter, "score": self.best_score},
             "score_history": self.score_history,
             "best_score_history": self.best_score_history
-        }, fname+".json")
+        }, jname)
         pass
-
+# end
 
 
 def reshape(l: list[str], columns: list[str]):
