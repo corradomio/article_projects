@@ -136,21 +136,27 @@ class TargetFunction(BaseTargetFunction):
 # end
 
 
-class MushroomClassifier():
+class MushroomClassifier:
 
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-        self.parameters = kwargs['parameters']
-        self.target_function = kwargs['target_function']
+        p = kwargs['parameters']
+        tf = kwargs['target_function']
+        self.parameters = p[0] if isinstance(p, list) else p
+        self.target_function = tf[0] if isinstance(tf, list) else tf
 
-    def grid_params(self, n=None):
-        return self.parameters.grid_params(n)
+    # def grid_params(self, n=None):
+    #     gparams = self.parameters.grid_params(n)
+    #     gparams['parameters'] = [self.parameters]
+    #     gparams['target_function'] = [self.target_function]
+    #     return gparams
 
     def get_params(self, deep=True):
-        params = self.parameters.grid_values()
-        params['parameters'] = self.parameters
-        params['target_function'] = self.target_function
-        return params
+        # params = self.parameters.grid_values()
+        # params['parameters'] = self.parameters
+        # params['target_function'] = self.target_function
+        # return params
+        return self.kwargs
 
     def fit(self, X, y):
         return self
@@ -164,19 +170,30 @@ def main():
     X, y = data
 
     D = 100
+
+    # prepare the data structures
     parameters = Parameters(data, D)
     target_function = TargetFunction(data, D)
 
+    # prepare the estimator's parameters
+    estimator_params = parameters.grid_values()
+    estimator_params['target_function'] = target_function
+    estimator_params['parameters'] = parameters
+
+    # create theestimator
     estimator = MushroomClassifier(
-        parameters=parameters,
-        target_function=target_function
+        **estimator_params
     )
 
-    grid_params = estimator.grid_params(5)
+    # prepare the grid parameters
+    grid_params = parameters.grid_params(5)
+    grid_params['target_function'] = [target_function]
+    grid_params['parameters'] = [parameters]
 
+    # create the grid search engine
     gscv = GridSearchCV(
-        estimator,
-        grid_params,
+        estimator=estimator,
+        param_grid=grid_params,
         scoring=accuracy_score,
         n_jobs=1
     )

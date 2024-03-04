@@ -108,7 +108,9 @@ def main():
     target_function = TargetFunction(data, D, parameters=None)
 
     gp_bounds = parameters.bounds()
-    gp_x0 = parameters.x0()
+    # not necessary
+    # gp_x0 = parameters.x0()
+    gp_x0 = None
 
     res = gp_minimize(
         target_function,        # target function
