@@ -228,3 +228,181 @@ Devo studiare meglio come "comandare" l'ottimizzatore: ci dovrebbero essere solo
         Controls how much improvement one wants over the previous best
         values. Used when the acquisition is either "EI" or "PI".
 
+Il secondo è chiaro. Tu starai usando Expected Improvement. Quindi il primo parametro, che è il tipico valore per avere 
+un intervallo di confidenza del 95% non è in gioco.
+
+Comunque le fluttuazioni durante l'exploitatoon sono fisiologiche e non me ne preoccuperei.
+
+Deadline della specia issue estesa:
+Full paper submission deadline: Extended to March 18, 2024
+
+"Huston, abbiamo un problema":
+secondo me, usare BayesOpt OPPURE generare delle soluzioni a caso, otteniamo lo stesso identico risultato.
+Dai seguenti plot, non sembra ci sia un "trend" che fa si che l'ottimizzatore baiesiano, dopo un po' inizia a scegliere
+soluzioni "piu' buone".
+E non c'e' nemmeno un "trend evidente di una soluzione migliore": i miglioramenti nelle performance del classificatore
+sono "fondamentalmente" marginali  (qualche digit nelle cifre decimali)
+
+l'ultimo plot usa 100 punti distillati. Non ha un titolo coerente con gli altri perche' e' un vecchio plot. Lo sto
+rifacendo, MA per capire di che cosa si tratta, e' sufficiente
+
+non c'è una variabilità troppo alta nella ricerca, cioè il parametro che controlla l'exploration è troppo forte?
+
+c'è una prior gaussiana?
+
+
+potrebbe non essere una cattiva notizia che trovi l'ottimo dopo solo sei passi; riguardo al confronto con la ricerca
+causale e con la ricerca su griglia, quanto ci mettono questo a trovare la soluzione: se si migliora di un ordine di
+grandezza è fatta
+
+volevo dire quanto ci mettono questi?
+
+... nel senso che si può avere la stima della facilità del problema da quanto tempo di mette la random search o la grid
+search, e poi vedere di quale fattore migliora la ricerca con la BO.
+
+GridSearch sul dataset "mushroom": piccolo problemino, con 100 punti, 22 coordinate per punto, quindi 2200 parametri, ci sono
+
+~4*10^1408 (millequattrocentootto)
+
+configurazioni da testare.
+Un "tantino tantine" 🤣 
+
+
+già, queste configurazioni crescono come funghi! 😅
+
+scikit-learn non ha degli oggetti adatti a gestire queste dimensioni.
+Ho dovuto implementarne uno custom! 
+
+4*10^1408 salta fuori da tutti i differenti valori che possono assumere le coordinate?
+
+Ho avuto un'illuminazione. In realtà la dimensionalità è molto più bassa. Permutando i punti si ha lo stesso risultato
+(a noi non interessa chi è il primo chi il secondo, perché in questa applicazione non dobbiamo chiamarli per nome)
+quindi bisogna dividere per 100! che è dell'ordine di 10^58. So che è un miglioramento del 3% ma no si butta via
+niente... e magari nei dati ci sono altre simmetrie da sfruttare.
+
+L'illuminazione ha dato il via ad altre illuminazioni (queste sono a basso consumo, quindi non e' che siano cosi' iluminate 😉):
+
+Partiamo dal datase "Mushroom" fatto solo da colonne categoriche
+
+1) lo spazio e' troppo sparso, quindi serve un modo "ragionevole" per cercare di campionarlo in modo un po' piu' 
+intelligente. Pensavo di usare un campinamento in cui, per ogni "dimensione" le etichette vengono scelte INVECE che 
+usando una distribuzione "uniforme", mediante una distribuzione "pesata" in base al numero di occorrenze di quella 
+etichetta nel dataset originale.
+2) un secondo approccio e' quello del "ipercubo latino"
+
+https://en.wikipedia.org/wiki/Latin_hypercube_sampling
+
+pero' bisogna aumentare il numero di campioni, perche' i 100 che uso ora sono decisamente pochi.
+
+3) per fare un campinamento "decente" bisognerebbe provare TUTTE le etichette per TUTTI 2200 parametri ALMENO una volta.
+
+Comunque, "spannometricamente"/"a sensazione" non credo che si possa fare di meglio.
+
+
+Quindi, poiche' i parametri sono 2200, e testiamo SOLO 100 punti, va da se che e' ragionevole che all'inizio BayesOpt 
+non possa essere significativamente meglio di campionamento casuale
+
+Già. All'inizio è sensato. Temo che il punto si che bisogna andare avanti con BO per un lungo tempo... ci penso.
+
+Ma in dimensionalità molto minore già funziona?
+
+il dataset ha 22 colonne. Con 10 punti ci sono 220 parametri. diciamo che servono almeno 1000 iterazioni per vedere 
+qualche cambiamento, o forse anche mooolto di piu' (10000?).
+Python e' lento: con 100 punti mi pare sto 10min circa. Quindi si passa a 100 o 1000 min.
+si puo' fare qualcosa con il parallelismo. Diciamo una divisione per 10, se  c'e' abbastanza memoria
+
+La strategia di campionamento Latin hypercube garantisce uniformità della copertura/distribuzione. Il campionamento 
+ortogonale garantisce scorrelazione tra le dimensioni. Però in entrambi i casi stiamo parlando di disegno di 
+esperimenti, mentre qui i dati ce li abbiamo già osservati con la loro distribuzione
+
+La suddivisione in intervalli non va fatta uniformemente, ma in base alle coordinate dei data points
+
+Gianni, ricordo che il quadrato latino è una delle strategie di inizializzazione anche per BO.
+
+Visto che il problema è la dimensionalità pensavi che potremmo provare l'embedding
+In una dimensionalità non troppo bassa.
+Per non buttare via troppa informazione
+
+Ok, immagino che sarà opportunamente adattato ai dati
+Anche io pensavo a riduzione. Ma poi bisogna rimanere nello spazio ridotto
+
+Mi sa che non funziona, almeno se leggo nella mente 😉
+Alcuni numeri: supponiamo il dataset Mushroom fatto solo da colonne categoriche.
+
+1) il dataset ha 22 colonne
+
+2) supponiamo NON un encoding onehot, MA un encoding binario, piu' efficiente. Le colonne diventano 54. Fare dimensional 
+reduction qui si potrebbe anche fare MA a quanto la riduci, a 10? Ma poi come ritorni indietro? Perche' bisogna andare 
+andare da 10 a 54 (bin encoded) a 22 (properieta' categorichei originali)
+
+3) supponiamo 100 punti per il dataset distillato. Sono 2200 parametri. Qui la dimensional reduction consiste nell'usare 
+MENO PUNTI, ma non si puo' andare sotto certi limiti altrimenti le performance del classificatore distillato scende a 
+livelli inutili.
+
+4) comprimere i 2200 parametri con quelache sistema di embedding? Il problema e' che non e' un dataset, e' un singolo 
+punto in 2200 dimensioni, quindi non si puo' fare. Ma anche se si potesse fare, diciamo un embedding a 100 dimensioni, 
+poi comunque bisogna ritornare alle 2200 perche' stiamo cercando i rappresentatin del dataset originale, rappresentato 
+dai 2200 parametri cioe' 100 punti con 22 proprieta' ciascuno.
+
+Quindi, boh!
+
+Chiarissimo. Sono d'accordo. Anzi avrei risposto subito già al messaggio di Gianni ieri sera se non avessi avuto paura 
+di disturbare. Se però tu Corrado mi garantisci che metti il cellulare in modalità volo risponderò anche la sera.
+
+Nella mia testa sta girando un'idea balenga sull'ottimizzazione in sottospazi, ma prima la preciso poi ve la racconto, 
+così vediamo se è da cestinare
+
+Corrado, quando parli di inizializzazione a caso, intendi che ha "generato" dei punti a caso o che li hai scelti a caso
+dall'insieme dei punti esistenti?
+
+generati a caso: ogni coordinata viene scelta in modo random tra i possibili valori categorici di quella coordinata
+
+partendo con un sottoinsieme dei dati originali probabilmente si partirebbe avvantaggiati
+anzi: fornendo lo score di una collezione di sottoinsiemi del dataset originale si darebbe a BO una visione ampia del
+panorama
+ciascun campione corrisponde ad un punto den nostro spazio alto-dimensionale e tanti campioni definiranno una zona, una
+regione di interesse
+mi chiedo se non si possa dire a BO di non allontanarsi troppo da quella regione di interesse (magari si potrebbe
+passare questa informazione tramite l'acquisition function se il software consente di metterci le mani sopra)
+
+Secondo me non cambia nulla:
+ci sono due approcci (il primo fatto, il secondo da fare)
+
+1) generazione punti random, e l'ottimizzatore cerca le nuove coordinate che saranno sicuramente diverse  dai punti del 
+dataset, (praticamente si possono pensare random anche loro)
+
+2) come sopra MA i punti random vengono rimpiazzati da punti del dataset (i piu' vicini)
+
+In teoria si puo' fare, poiche' la funzione di acquisizione e' configurabile. E poi il codice e' disponibile, quindi si 
+puo' modificare a piacimento
+
+Sono d'accordo che si tratta di due modalità di inizializzazione legittime, ma non sono sicuro che siano equivalenti: 
+nel secondo si parte da quantità esistenti e il campionamento casuale dà alcune garanzie sulla plausibilità della
+soluzione.
+Un modo rudimentale per dire a BO di non cercare altrove è di mettere a zero o a epsilon tutti i valori della curva al
+di fuori della regione di interesse (idelmente una sfera che contenga tutti i punti HD fin lì generati - ogniuno
+rappresentante 100 punti in LD);
+
+invece della sfera si può usare una sfera "sfumata" per consentire un certo allontanamento: questo si implementa non 
+mettendo non mettere completamente a zero l'esterno: si moltiplica per una funzione decrescente con la distanza dalla 
+superficie o dal centro
+
+ciò limita la ricerca ad un volume moooooolto più piccolo
+
+Anche a me sembrano differenti. Nel caso di ricampionamento dal dataset, si campiona dalla distribuzione empirica dei 
+dati, che dovrebbe essere fedele alla distribuzione teorica del fenomeno (supposto che il dataset originale è stato 
+campionato bene)
+
+Nell'altro caso si campiona uniformemente o circa dallo spazio campionario tutto
+
+Un altro tema su cui credo possiamo migliorare è la codifica dello spazio, perché grazie al fatto che il problema è
+degenere (ci sono n! soluzioni identiche grazie alla permutabilità dei punti) credo che ci stiamo muovendo in uno
+spazio inutilmente ampio. Mi spiego con un esempio giocattolo: se devo trovare l'ottimo, in un cubo HD di ben 3
+dimensioni [0,1]^3, e lo faccio usando le sue 3 coordinate nello spazio LD di una dimensione ciascuna definita in [0,1],
+non devo consentire a tutti i punti LD di variare sull'intero range [0,1]. Idealmente (dal che se capisce che non ho
+un'idea precisa su come codificarlo) si dovrebbe lasciare al primo punto LD x_1 la libertà di muoversi in [0,1], al
+secondo punto x_2 la libertà di muoversi in [x_1,1], e al terzo x_3 di muoversi in [x_2,1]. Anche generandoli a caso
+negli intervalli che ho citato mi sembr a che si renda la ricerca più efficiente. Credo a spanne che il volume dello
+spazio di ricerca si riduca ad 1/4 di quello originale. La codifica di questo schema nel nostro caso però potrebbe non
+essere triviale.
+

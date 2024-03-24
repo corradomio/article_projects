@@ -30,8 +30,8 @@ class TargetFunction(BaseTargetFunction):
               ]
     TARGET = 'income'
 
-    def __init__(self, data, D, parameters=None, maximize=True):
-        super().__init__(data, D, parameters=parameters, maximize=maximize)
+    def __init__(self, X, y, D, parameters=None, maximize=True):
+        super().__init__(X, y, D, parameters=parameters, maximize=maximize)
 
         X = self.X
         y = self.y
@@ -101,11 +101,11 @@ def main():
     path("results/grid").mkdir_p()
     path("plots/grid").mkdir_p()
 
-    data = load_data()
+    X, y = load_data()
 
     D = 100
-    parameters = Parameters(data, D)
-    target_function = TargetFunction(data, D, parameters=None)
+    parameters = Parameters(X, y, D)
+    target_function = TargetFunction(X, y, D)
 
     gp_bounds = parameters.bounds()
     gp_x0 = parameters.x0()

@@ -6,6 +6,7 @@ import pandas as pd
 import pandasx as pdx
 import jsonx as jsx
 from stdlib import lrange
+from stdlib.timing import delta_time
 
 
 def reshape(l: list[str], columns: list[str]):
@@ -17,26 +18,8 @@ def reshape(l: list[str], columns: list[str]):
 # end
 
 
-def delta_time(start: datetime, done: datetime):
-    seconds = int((done - start).total_seconds())
-    if seconds < 60:
-        return f"{seconds} s"
-    elif seconds < 3600:
-        s = seconds % 60
-        m = seconds // 60
-        return f"{m:02}:{s:02} s"
-    else:
-        s = seconds % 60
-        seconds = seconds // 60
-        m = seconds % 60
-        h = seconds // 60
-        return f"{h:02}:{m:02}:{s:02} s"
-# end
-
-
 class Parameters:
-    def __init__(self, data, D):
-        X, y = data
+    def __init__(self, X, y, D):
         self.X: pd.DataFrame = X
         self.y: pd.DataFrame = y
         self.D: int = D
@@ -126,11 +109,9 @@ def nameof(s: str) -> str:
         s = s[:p]
     return s
 
-class BaseTargetFunction:
-    def __init__(self, data, D, parameters=None, maximize=True):
-        X, y = data
 
-        self.data = data
+class BaseTargetFunction:
+    def __init__(self, X, y, D, parameters=None, maximize=True):
         self.X = X  # features
         self.y = y  # target
         self.D = D  # n of distilled points
@@ -153,8 +134,6 @@ class BaseTargetFunction:
         self.start_time = datetime.now()
         self.done_time = datetime.now()
 
-    # end
-
     def create_classifier(self, X, y):
         ...
 
@@ -166,6 +145,11 @@ class BaseTargetFunction:
 
     def __call__(self, *args, **kwargs):
         ...
+
+    def fit(self, X, y):
+        self.X = X
+        self.y = y
+        self.M = X.shape[1]  # n of features
 
     def save(self, fname):
         self.done_time = datetime.now()

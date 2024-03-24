@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 
 _TIMEDELAY = 3  # seconds
@@ -96,3 +97,22 @@ class Timing:
             return "not stopped"
     # end
 # end
+
+
+def delta_time(start: datetime, done: datetime):
+    assert start <= done, "Start time must be before done time"
+    seconds = int((done - start).total_seconds())
+    if seconds < 60:
+        return f"{seconds} s"
+    elif seconds < 3600:
+        s = seconds % 60
+        m = seconds // 60
+        return f"{m:02}:{s:02} s"
+    else:
+        s = seconds % 60
+        seconds = seconds // 60
+        m = seconds % 60
+        h = seconds // 60
+        return f"{h:02}:{m:02}:{s:02} s"
+# end
+
