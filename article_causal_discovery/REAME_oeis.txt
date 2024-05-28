@@ -1,0 +1,47 @@
+https://en.wikipedia.org/wiki/Directed_acyclic_graph
+https://en.wikipedia.org/wiki/Strongly_connected_component#Definitions
+https://en.wikipedia.org/wiki/Edge_contraction
+
+https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
+https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm
+
+g = Graph[{
+    1 -> 3, 3 -> 2, 2 -> 1, 3 -> 5, 5 -> 4, 4 -> 3, 14 -> 15,
+    15 -> 16, 16 -> 14, 11 -> 12, 12 -> 11, 7 -> 8, 8 -> 9, 9 -> 10,
+    10 -> 8, 8 -> 10, 4 -> 7, 5 -> 8, 2 -> 6, 5 -> 6, 9 -> 11,
+    11 -> 13, 6 -> 14, 6 -> 16, 15 -> 13, 16 -> 13
+}]
+
+
+
+ConnectedComponents[g]      -> {{v11,...}, ...}
+ConnectedGraphComponent[g]  -> {graph1, ...}
+    where graph1 = Subgraph[g, {v11,...}]
+
+
+
+https://oeis.org/A003024
+    A003024 		Number of acyclic digraphs (or DAGs) with n labeled nodes.
+    1, 1, 3, 25, 543, 29281, 3781503, 1138779265, 783702329343, 1213442454842881, 4175098976430598143,
+    31603459396418917607425, 521939651343829405020504063, 18676600744432035186664816926721,
+    1439428141044398334941790719839535103
+
+https://oeis.org/A003087
+    A003087 		Number of acyclic digraphs with n unlabeled nodes.
+    1, 1, 2, 6, 31, 302, 5984, 243668, 20286025, 3424938010, 1165948612902, 797561675349580, 1094026876269892596,
+    3005847365735456265830, 16530851611091131512031070, 181908117707763484218885361402
+
+https://oeis.org/A101228
+    A101228 		Number of weakly connected acyclic digraphs on n unlabeled nodes.
+    1, 1, 4, 24, 267, 5647, 237317, 20035307, 3404385285, 1162502511721, 796392234736238, 1093228137893084112,
+    3004752537725051647790, 16527844667281561960220731, 181891583847006693859132403681,
+    4004313473818592854334088690859030
+
+
+https://oeis.org/A082402
+    A082402 		Number of n-node labeled weakly connected acyclic digraphs.
+	0, 1, 2, 18, 446, 26430, 3596762, 1111506858, 774460794326, 1206342801843750, 4162927142993589122,
+	31557464707483035620178, 521560130632321900618457246, 18669813048017298278379855511470
+
+
+http://users.cecs.anu.edu.au/~bdm/data/graphs.html
