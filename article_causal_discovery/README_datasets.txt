@@ -40,17 +40,21 @@ Grafi
 HDF5
 ----
 
-    /<deg>/<graph_id>
+    /<order>/<graph_id>
         attrs:
             'n':                n of nodes (order)
             'm':                n of edges (size)
             'adjacency_matrix': adjacency matrix (n x n)
             'wl_hash':          Weisfeiler Leman hash
-        <method>/<sem_type>:    dataset (10000 x n)
+
+        <sem_type>:             dataset (10000 x n)
+            attrs:
+                'method':       method ('linear' | 'nonlinear')
+                'sem_type':     sem_type
 
 
     <deg>:      '2', '3', '4', '5', '10', '15', '20', '25'
-    <method>/<sem_type>:
+    <sem_type>:
         "linear": ["gauss", "exp", "gumbel", "uniform", "logistic"],
         "nonlinear": ["mlp", "mim", "quadratic"]  # "gp", "gp-add",
 

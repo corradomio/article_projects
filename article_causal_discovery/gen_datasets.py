@@ -55,14 +55,16 @@ def generate_datasets(container: h5py.File, ginfo: dict, N: int = 1000):
 
     for method in SEM_TYPES:
         for sem_type in SEM_TYPES[method]:
-            log.info(f"... {method}/{sem_type}")
+            # log.info(f"... {method}/{sem_type}")
 
             iidsim = IIDSimulation(method=method, sem_type=sem_type)
             iidsim.fit(W)
             ds = iidsim.generate(N).astype(np.float32)
 
-            container.create_dataset(
-                f"{n}/{wl_hash}/{method}/{sem_type}", (N, n), dtype=ds.dtype, data=ds)
+            dset = container.create_dataset(
+                f"{n}/{wl_hash}/{sem_type}", (N, n), dtype=ds.dtype, data=ds)
+            dset.attrs['method'] = method
+            dset.attrs['sem_type'] = sem_type
             # break
         # break
     # end

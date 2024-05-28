@@ -42,9 +42,16 @@ from h5pyx import dump_structure
 GRAPH_ORDERS = ['2', '3', '4', '5', '10', '15', '20']
 
 
-def scan_orders(c: h5py.Group):
+def scan_graphs(c: h5py.Group):
     for order in GRAPH_ORDERS:
-        group = c[order]
+        ogroup = c[order]
+        for gid in ogroup.keys():
+            process_graph(ogroup[gid])
+
+
+def process_graph(ogroup: h5py.Group):
+    pass
+
 
 
 def main():
@@ -55,7 +62,7 @@ def main():
 
     c = h5py.File('graphs-datasets.hdf5', 'r')
 
-    scan_orders(c)
+    scan_graphs(c)
 
     log.info("done")
 # end
