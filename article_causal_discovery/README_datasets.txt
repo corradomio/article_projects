@@ -37,8 +37,8 @@ Grafi
         (quindi 3000 DAG)
 
 
-HDF5
-----
+HDF5 datasets
+-------------
 
     /<order>/<graph_id>
         attrs:
@@ -59,3 +59,20 @@ HDF5
         "nonlinear": ["mlp", "mim", "quadratic"]  # "gp", "gp-add",
 
         Note: "gp", "gp-add" removed because the data generation is too time expensive
+
+
+HDF5 predictions
+----------------
+
+    /<order>/<graph_id>
+        attrs:
+            'n':                n of nodes (order)
+            'm':                n of edges (size)
+            'adjacency_matrix': adjacency matrix (n x n)
+            'wl_hash':          Weisfeiler Leman hash
+
+        <sem_type>:             dataset (10 x n x n)
+            attrs:
+                'method':       method ('linear' | 'nonlinear')
+                'sem_type':     sem_type
+

@@ -1,5 +1,7 @@
+import os
 from datetime import datetime
 
+import random as rnd
 import castle
 import igraph as ig
 import networkx as nx
@@ -18,6 +20,9 @@ def main():
     log.info(f"nx: {nx.__version__}")
     log.info(f"ig: {ig.__version__}")
     log.info(f"castle: {castle.__version__}")
+
+    os.makedirs('data', exist_ok=True)
+    os.makedirs('graphs', exist_ok=True)
 
     n_range = range(10, 26, 5)      # n of vertices/nodes
     d_range = [0.10, 0.15, 0.20]    # graph density
@@ -73,6 +78,7 @@ def main():
     #
     # Select random DAG with specified order & size
     #
+    rnd.seed(42)
 
     # N: n of nodes
     # D: graph density:
@@ -116,12 +122,12 @@ def main():
 
     log.info(f'saving ...')
     # jsx.save(jdata, f"graphs-{now.strftime('%Y%m%d-%H%M%S')}.json")
-    jsx.save(jdata, f"graphs-enum.json")
+    jsx.save(jdata, f"data/graphs-enum.json")
     log.info('done')
     return
 
 
 if __name__ == "__main__":
     logging.config.fileConfig("logging_config.ini")
-    logging.getLogger("root").info("Logging initialized")
+    logging.getLogger("main").info("Logging initialized")
     main()

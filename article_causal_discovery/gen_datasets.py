@@ -1,14 +1,17 @@
-from datetime import datetime
-from path import Path as path
 import os
+
 import castle
+import h5py
 import igraph as ig
 import networkx as nx
 import numpy as np
+import random as rnd
+
 import stdlib.jsonx as jsx
 import stdlib.loggingx as logging
-import h5py
+import causalx
 from causalx.iidsim import IIDSimulation
+
 
 # IIDSimulation
 #     W: np.ndarray
@@ -81,17 +84,20 @@ def main():
     D = 1
     N = 10000
 
+    rnd.seed(42)
+    causalx.set_random_seed(42)
+
     #
     # Load graphs
     #
-    graphs = jsx.load("graphs-enum.json")
+    graphs = jsx.load("data/graphs-enum.json")
 
     #
     # Create HDF5 container
     #
 
-    os.remove('graphs-datasets.hdf5')
-    container = h5py.File('graphs-datasets.hdf5', 'w')
+    os.remove('data/graphs-datasets.hdf5')
+    container = h5py.File('data/graphs-datasets.hdf5', 'w')
 
     #
     # scan the graphs. Note: the key is a string
@@ -109,5 +115,5 @@ def main():
 
 if __name__ == "__main__":
     logging.config.fileConfig("logging_config.ini")
-    logging.getLogger("root").info("Logging initialized")
+    logging.getLogger("main").info("Logging initialized")
     main()

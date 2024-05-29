@@ -1,0 +1,29 @@
+{
+    "#note": {
+        "doc": "names starting with '#' are skipped"
+    },
+    "#PC": {
+        "class": "castle.algorithms.PC"
+    },
+    "#ANMNonlinear": {
+        "class": "castle.algorithms.ANMNonlinear"
+    },
+    "#DirectLiNGAM": {
+        "class": "castle.algorithms.DirectLiNGAM"
+    },
+    "#ICALiNGAM": {
+        "class": "castle.algorithms.ICALiNGAM",
+        "0": {
+            "max_iter": 1000,
+            "thresh": 0.33
+        }
+    },
+    "#GES": {
+        "class": "castle.algorithms.GES"
+    },
+    "GOLEM": {
+        "class": "castle.algorithms.GOLEM",
+        "checkpoint_iter": 2500,
+        "num_iter": 5000
+    }
+}
