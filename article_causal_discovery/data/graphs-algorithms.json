@@ -2,7 +2,7 @@
     "#note": {
         "doc": "names starting with '#' are skipped"
     },
-    "#PC": {
+    "PC": {
         "class": "castle.algorithms.PC"
     },
     "#ANMNonlinear": {
@@ -58,10 +58,6 @@
     },
     "#Notears": {
         "class": "castle.algorithms.Notears",
-        "max_iter": 100
-    },
-    "TTPM": {
-        "class": "castle.algorithms.TTPM",
         "max_iter": 100
     }
 }

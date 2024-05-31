@@ -63,8 +63,6 @@ ICALiNGAM
         Drop edge if |weight| < threshold
 
 
-
-
 GES
 
     Parameters

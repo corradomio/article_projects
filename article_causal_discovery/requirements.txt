@@ -1,3 +1,10 @@
+# Corrado Mio libraries
+# stdlib
+# numpyx
+# netx
+# causalx
+
+
 path
 h5py
 
@@ -17,9 +24,6 @@ xgboost
 
 torch
 skorch
-
-# available ONLY for Python 3.7, 3.8
-# mindspore
 
 gcastle
 dowhy

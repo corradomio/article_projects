@@ -7,6 +7,7 @@ import h5py
 import networkx as nx
 import torch
 import numpy as np
+from path import Path as path
 from joblib import Parallel, delayed
 
 import numpyx as npx
@@ -75,6 +76,7 @@ def prepare_data(algo_name, X: np.ndarray) -> np.ndarray:
 # All dataset have 10000 records and can be considered as the concatenation
 # of 10 different datasets with 1000 records each one
 
+GRAPH_DATASETS = "data/graphs-datasets.hdf5"
 DS_LEN = 10000
 DS_PART_LEN = 1000
 
@@ -87,14 +89,22 @@ def list_graph_names(n_parts: int = 1) -> Union[list[str], list[list[str]]]:
         more or less all Python instances will process the assigned graphs in
         similar time.
     """
+    log.info('Collect graphs to process')
 
-    with h5py.File("data/graphs-datasets.hdf5", "r") as c:
+    with h5py.File(GRAPH_DATASETS, "r") as c:
         # collect the graph names
         graph_names = []
         for order in GRAPH_ORDERS:
             graphs_list = c[order]
 
             for graph_id in graphs_list.keys():
+                graph_info = graphs_list[graph_id]
+                n = graph_info.attrs['n']
+                m = graph_info.attrs['m']
+
+                # skip graphs with 25 nodes
+                if n > 20: continue
+
                 graph_names.append(graphs_list[graph_id].name)
 
     # sequential processing
@@ -117,48 +127,79 @@ def list_graph_names(n_parts: int = 1) -> Union[list[str], list[list[str]]]:
 # end
 
 
-def process_graphs(parallel=False):
+def list_graph_processed() -> list[str]:
+    processed = set()
+    for graph_predictions_name in path("data").files("graphs-predictions*.hdf5"):
+        try:
+            p = h5py.File(graph_predictions_name, "r")
+
+            for gorder in p.keys():
+                graphs = p[gorder]
+                for graph_id in graphs.keys():
+                    name = graphs[graph_id].name
+                    processed.add(name)
+
+            p.close()
+        except OSError as e:
+            # os.remove(graph_predictions_name)
+            p = h5py.File(graph_predictions_name, "w")
+            p.close()
+    # end
+    return list(processed)
+
+
+def process_graphs(n_jobs=0):
     # collect the list of graphs
     # can be executed in parallel
 
-    if parallel:
-        # n_jobs = 8
-        # n_parts = n_jobs * 2
+    graphs_processed = list_graph_processed()
 
-        n_jobs = 10
+    if n_jobs > 1:
+
         n_parts = n_jobs
 
-        graph_names_lists = list_graph_names(n_parts=n_parts)
-        Parallel(n_jobs=n_jobs)(delayed(parallel_process_graphs)(i + 1, graph_names_lists[i]) for i in range(n_parts))
+        graphs_to_process = list_graph_names(n_parts=n_parts)
+        Parallel(n_jobs=n_jobs)(delayed(parallel_process_graphs)(i + 1, graphs_to_process[i], graphs_processed)
+                                for i in range(n_parts))
     else:
-        sequential_process_graphs(list_graph_names())
+        graphs_to_process = list_graph_names()
+        sequential_process_graphs(graphs_to_process, graphs_processed)
     return
 # end
 
 
-def sequential_process_graphs(graph_names: list[str]):
-    log.info(f"Process sequential started on {len(graph_names)} graphs")
-    c = h5py.File("data/graphs-datasets.hdf5", "r")
+def sequential_process_graphs(graphs_to_process: list[str], graphs_processed: list[str]):
+    log.info(f"Process sequential started on {len(graphs_to_process)} graphs")
+    c = h5py.File(GRAPH_DATASETS, "r")
 
-    if os.path.exists("data/graphs-predictions.hdf5"):
-        os.remove("data/graphs-predictions.hdf5")
-    p = h5py.File("data/graphs-predictions.hdf5", "w")
+    graph_predictions_name = "data/graphs-predictions.hdf5"
+    # if os.path.exists(graph_predictions_name):
+    #     os.remove(graph_predictions_name)
+    p = h5py.File(graph_predictions_name, "w")
 
     # list of order/size graphs processed
     processed = set()
 
-    for graph_name in graph_names:
+    n_graphs = len(graphs_to_process)
+    for i in range(n_graphs):
+        graph_name = graphs_to_process[i]
         graph_info = c[graph_name]
+        name = graph_info["name"]
+
+        if name in graphs_processed:
+            continue
+
         n = graph_info.attrs['n']
         m = graph_info.attrs['m']
 
-        # FILTER
-        # process a single graph with the specified (order, size)
-        pair = (n, m)
-        if pair in processed:
-            continue
-        else:
-            processed.add(pair)
+        log.info(f"... {name}: {n} x {m} [{i+1}/{n_graphs}]")
+
+        # FILTER: process a single graph with the specified (order, size)
+        # pair = (n, m)
+        # if pair in processed:
+        #     continue
+        # else:
+        #     processed.add(pair)
         # FILTER END
 
         process_graph(graph_info, p)
@@ -167,7 +208,7 @@ def sequential_process_graphs(graph_names: list[str]):
 # end
 
 
-def parallel_process_graphs(process_id, graph_names: list[str]):
+def parallel_process_graphs(process_id, graph_names: list[str], graphs_processed: list[str]):
     # Initialize the logging system in THIS process
     global log
     logging.config.fileConfig("logging_config.ini")
@@ -175,19 +216,34 @@ def parallel_process_graphs(process_id, graph_names: list[str]):
     log.info(f"Process {process_id:02} started on {len(graph_names)} graphs")
 
     # load the datasets
-    c = h5py.File("data/graphs-datasets.hdf5", "r")
+    c = h5py.File(GRAPH_DATASETS, "r")
 
     # initialize the container for the results
     graph_predictions_name = f"data/graphs-predictions-{process_id:02}.hdf5"
-    if os.path.exists(graph_predictions_name):
-        os.remove(graph_predictions_name)
-    p = h5py.File(graph_predictions_name, "w")
+    # if os.path.exists(graph_predictions_name):
+    #     os.remove(graph_predictions_name)
+    p = h5py.File(graph_predictions_name, "a")
 
     # scan the graphs
-    for graph_name in graph_names:
+    n_graphs = len(graph_names)
+    for i in range(n_graphs):
+        graph_name = graph_names[i]
         graph_info = c[graph_name]
+        name = graph_info.name
+
+        if name in graphs_processed:
+            continue
+
+        n = graph_info.attrs["n"]
+        m = graph_info.attrs["m"]
+
+        log.info(f"... {name}: {n} x {m} [{i+1}/{n_graphs}]")
+
         process_graph(graph_info, p)
         # break
+    # end
+
+    log.info(f"Done")
     return
 # end
 
@@ -197,8 +253,6 @@ def process_graph(graph_info: h5py.Group, p: h5py.Group = None):
     n = graph_info.attrs["n"]
     m = graph_info.attrs["m"]
     wl_hash = graph_info.attrs["wl_hash"]
-
-    log.info(f"... {name}: {n} x {m}")
 
     A = graph_info.attrs["adjacency_matrix"]
 
@@ -215,6 +269,10 @@ def process_graph(graph_info: h5py.Group, p: h5py.Group = None):
 
         # scan sem_type
         for sem_type in graph_info.keys():
+
+            # skip 'logistic'
+            if sem_type in ['logistic']: continue
+
             log.info(f"... ... {algo_name}/{sem_type}")
 
             datasets: h5py.Dataset = graph_info[sem_type]
@@ -232,19 +290,23 @@ def process_graph(graph_info: h5py.Group, p: h5py.Group = None):
                 # some algorithms need data in some special format
                 X = prepare_data(algo_name, X)
 
-                algo.learn(X)
-                C: np.ndarray = algo.causal_matrix.astype(np.int8)
+                try:
+                    algo.learn(X)
+                    C: np.ndarray = algo.causal_matrix.astype(np.int8)
 
-                CM[i, :, :] = C
+                    CM[i, :, :] = C
+                except Exception as e:
+                    log.full_error(e, f"Unable to analyze the data {name}/{sem_type} using {algo_name}")
+                    CM[i, :, :] = 0
 
-                break   # FILTER
+                # break   # FILTER
             # end
             dset = p.create_dataset(f"{name}/{algo_name}/{sem_type}", (nds, n, n), dtype=CM.dtype, data=CM)
             dset.attrs["method"] = method
             dset.attrs["sem_type"] = sem_type
             dset.attrs["algorithm"] = algo_name
-            break       # FILTER
-        break           # FILTER
+            # break       # FILTER
+        # break           # FILTER
     # end
 # end
 
@@ -261,7 +323,7 @@ def main():
     # Note: 'mindspore' is available ONLY for Python 3.8/3.9 AND it is Chinese package
     os.environ["CASTLE_BACKEND"] = "pytorch"
 
-    process_graphs(parallel=False)
+    process_graphs(n_jobs=10)
 
     log.info("done")
 # end

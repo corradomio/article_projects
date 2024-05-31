@@ -3,7 +3,6 @@ from datetime import datetime
 
 import random as rnd
 import castle
-import igraph as ig
 import networkx as nx
 
 import netx

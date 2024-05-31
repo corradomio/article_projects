@@ -2,7 +2,6 @@ import os
 
 import castle
 import h5py
-import igraph as ig
 import networkx as nx
 import numpy as np
 import random as rnd
@@ -81,7 +80,7 @@ def main():
     log.info(f"ig: {ig.__version__}")
     log.info(f"castle: {castle.__version__}")
 
-    D = 1
+    # n of records in the dataset
     N = 10000
 
     rnd.seed(42)
