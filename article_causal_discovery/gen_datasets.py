@@ -77,7 +77,6 @@ def generate_datasets(container: h5py.File, ginfo: dict, N: int = 1000):
 def main():
     log = logging.getLogger('main')
     log.info(f"nx: {nx.__version__}")
-    log.info(f"ig: {ig.__version__}")
     log.info(f"castle: {castle.__version__}")
 
     # n of records in the dataset

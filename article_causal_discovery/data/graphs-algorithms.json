@@ -2,13 +2,13 @@
     "#note": {
         "doc": "names starting with '#' are skipped"
     },
-    "PC": {
+    "#PC": {
         "class": "castle.algorithms.PC"
     },
     "#ANMNonlinear": {
         "class": "castle.algorithms.ANMNonlinear"
     },
-    "#DirectLiNGAM": {
+    "DirectLiNGAM": {
         "class": "castle.algorithms.DirectLiNGAM"
     },
     "#ICALiNGAM": {

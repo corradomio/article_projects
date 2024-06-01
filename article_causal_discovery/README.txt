@@ -23,7 +23,7 @@ Grafi generati
         - ordine 10, 15, 20, 25
         - densita' 10%, 15%, 20%
 
-    Elenco di coppie (n nody, n archi)
+    Elenco di coppie (n nodi, n archi)
 
         2     (2,  1),         1      1
         3     (3,  2),         3      4
@@ -79,16 +79,21 @@ Configurazione algoritmi
         }
 
     se la configurazione dipende dall'ordine del grafo (numero di vertici/nodi)
+    Come "trick", si puo' usare l'ordine "0" per specificare la configurazione comune
+    a tutti gli altri gradi, se non specificata
+
+    Nota: se si vuole sperimentare lo stesso algoritmo ma con parametri diversi,
+    creare diverse configurazioni con nomi diversi.
 
 
 Errori nelle predizioni
 -----------------------
 
-    Puo' caputare che un algoritmo fallisca nella fase di training e quindi non sia
+    Puo' capitare che un algoritmo fallisca nella fase di training e quindi non sia
     in grado di generare il grafo causale. In questo caso la matrice di adiacenza
     sara' quella di un grafo senza archi. In questo modo la matrice puo' ancora
-    essere usata per le statistiche, visto che e' rappresenta un possibile grafo
-    quando un algo, funzionante correttamente, non e' in grado di identificare
+    essere usata per le statistiche, visto che rappresenta un possibile grafo
+    generato da un algo funzionante, quando quest'ultimo non e' in grado di identificare
     le dipendenze
 
 

@@ -17,7 +17,6 @@ def iround(r: float) -> int:
 def main():
     log = logging.getLogger('main')
     log.info(f"nx: {nx.__version__}")
-    log.info(f"ig: {ig.__version__}")
     log.info(f"castle: {castle.__version__}")
 
     os.makedirs('data', exist_ok=True)
