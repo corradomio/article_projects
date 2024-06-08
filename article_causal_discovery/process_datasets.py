@@ -55,6 +55,7 @@ N_PARTS = N_JOBS
 # generated in some specific way. For performance/exception reasons
 # we skip graphs with 25 nodes and dataset generated using 'logistic'
 # method.
+# EXCLUDE_GRAPH_DEGREES = [2, 3, 4, 5, 10, 15, 25]
 EXCLUDE_GRAPH_DEGREES = [25]
 EXCLUDE_SEM_TYPES = ["logistic"]
 
@@ -66,7 +67,9 @@ EXCLUDE_SEM_TYPES = ["logistic"]
 def create_algo(algo_name: str, order: int = 0) -> castle.common.base.BaseLearner:
     """
     Create the specified algorithm with parameters specific for graphs with
-    the selected order
+    the selected order.
+
+    The order "0" is used as "any order"
 
     :param algo_name: algorithm name
     :param order: graph order (number of vertices)
@@ -79,6 +82,8 @@ def create_algo(algo_name: str, order: int = 0) -> castle.common.base.BaseLearne
     sorder = str(order)
     if sorder in algo_info:
         kwparams = algo_info[sorder]
+    elif "0" in algo_info:
+        kwparams = algo_info["0"]
     else:
         kwparams = {} | GRAPH_ALGORITHMS[algo_name]
         # remove all extra parameters:
@@ -120,6 +125,10 @@ def process_algorithms():
         # skip algorithms staring with '#...'
         if algo_name.startswith("#"):
             continue
+
+        log.info("------------------------------------------------------------")
+        log.info("-", algo_name)
+        log.info("------------------------------------------------------------")
 
         # create the directory containing the results
         os.makedirs(f"data/{algo_name}", exist_ok=True)
@@ -391,7 +400,36 @@ def process_graph(algo_name: str, graph_info: h5py.Group, graph_predictions_name
         dset.attrs["algorithm"] = algo_name
     # end
     p.close()
+# end
 
+
+def load_configuration():
+    global GRAPH_ALGO_CONFIG
+    global GRAPH_DATASETS
+    global GRAPH_ORDERS
+    global GRAPH_ALGORITHMS
+    global DATA_PREPARATION
+    global DS_LEN
+    global DS_PART_LEN
+    global N_JOBS
+    global N_PARTS
+    global EXCLUDE_GRAPH_DEGREES
+    global EXCLUDE_SEM_TYPES
+
+    config = jsonx.load("process-config.json")
+
+    GRAPH_ALGO_CONFIG = config["graph-algo-config"]
+    GRAPH_DATASETS = config["graph-datasets"]
+    GRAPH_ORDERS = config["graph-orders"]
+    DATA_PREPARATION = config["data-preparation"]
+    DS_LEN = config["dataset-length"]
+    DS_PART_LEN = config["dataset-part-length"]
+    N_JOBS = config["n-jobs"]
+    N_PARTS = config["n-parts"]
+    EXCLUDE_GRAPH_DEGREES = config["exclude-graph-degrees"]
+    EXCLUDE_SEM_TYPES = config["exclude-sem-types"]
+
+    GRAPH_ALGORITHMS = jsonx.load(GRAPH_ALGO_CONFIG)
 # end
 
 
@@ -407,6 +445,7 @@ def main():
     # Note: 'mindspore' is available ONLY for Python 3.8/3.9 AND it is Chinese package
     os.environ["CASTLE_BACKEND"] = "pytorch"
 
+    load_configuration()
     process_algorithms()
 
     log.info("done")

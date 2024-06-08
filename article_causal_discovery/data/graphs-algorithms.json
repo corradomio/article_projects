@@ -8,52 +8,84 @@
     "#ANMNonlinear": {
         "class": "castle.algorithms.ANMNonlinear"
     },
-    "DirectLiNGAM": {
+    "#DirectLiNGAM": {
         "class": "castle.algorithms.DirectLiNGAM"
     },
     "#ICALiNGAM": {
         "class": "castle.algorithms.ICALiNGAM",
         "0": {
-            "max_iter": 1000,
+            "max_iter": 5000,
+            "thresh": 0.33
+        },
+        "2": {
+            "max_iter": 2000,
+            "thresh": 0.33
+        },
+        "3": {
+            "max_iter": 3000,
+            "thresh": 0.33
+        },
+        "4": {
+            "max_iter": 4000,
+            "thresh": 0.33
+        },
+        "5": {
+            "max_iter": 5000,
+            "thresh": 0.33
+        },
+        "10": {
+            "max_iter": 10000,
+            "thresh": 0.33
+        },
+        "15": {
+            "max_iter": 15000,
+            "thresh": 0.33
+        },
+        "20": {
+            "max_iter": 20000,
+            "thresh": 0.33
+        },
+        "25": {
+            "max_iter": 25000,
             "thresh": 0.33
         }
     },
     "#GES": {
         "class": "castle.algorithms.GES"
     },
-    "#GOLEM": {
+    "GOLEM": {
         "class": "castle.algorithms.GOLEM",
         "2": {
-            "checkpoint_iter": 500,
-            "num_iter": 3000
+            "checkpoint_iter": 250,
+            "num_iter": 500
         },
         "3": {
-            "checkpoint_iter": 500,
-            "num_iter": 4000
+            "checkpoint_iter": 250,
+            "num_iter": 750
         },
         "4": {
+            "checkpoint_iter": 250,
+            "num_iter": 1000
+        },
+        "5": {
+            "checkpoint_iter": 250,
+            "num_iter": 1250
+        },
+        "10": {
+            "checkpoint_iter": 500,
+            "num_iter": 2500
+        },
+        "15": {
+            "checkpoint_iter": 500,
+            "num_iter": 3750
+        },
+        "20": {
             "checkpoint_iter": 500,
             "num_iter": 5000
         },
-        "5": {
-            "checkpoint_iter": 500,
-            "num_iter": 6000
-        },
-        "10": {
-            "checkpoint_iter": 1000,
-            "num_iter": 10000
-        },
-        "15": {
-            "checkpoint_iter": 1000,
-            "num_iter": 15000
-        },
-        "20": {
-            "checkpoint_iter": 1000,
-            "num_iter": 20000
-        },
         "25": {
-            "checkpoint_iter": 1000,
-            "num_iter": 25000
+            "checkpoint_iter": 500,
+            "num_iter": 6250
         }
     },
     "#Notears": {

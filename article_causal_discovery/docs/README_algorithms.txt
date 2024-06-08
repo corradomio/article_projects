@@ -3,6 +3,7 @@ per ogni grafo (~11000)
         per ogni algoritmo
             applica l'algo al dataset
 
+massimo grado 10
 
 Algorithms
     https://pypi.org/project/gcastle/
@@ -476,7 +477,7 @@ DAG_GNN
     ----------
     encoder_type: str, default: 'mlp'
         choose an encoder, 'mlp' or 'sem'.
-    decoder_type: str, detault: 'mlp'
+    decoder_type: str, default: 'mlp'
         choose a decoder, 'mlp' or 'sem'.
     encoder_hidden: int, default: 64
         MLP encoder hidden layer dimension, just one hidden layer.
