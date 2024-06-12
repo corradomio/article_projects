@@ -8,8 +8,8 @@ import random as rnd
 
 import stdlib.jsonx as jsx
 import stdlib.loggingx as logging
-import causalx
-from causalx.iidsim import IIDSimulation
+import castlex
+from castlex.iidsim import IIDSimulation
 
 
 # IIDSimulation
@@ -83,7 +83,7 @@ def main():
     N = 10000
 
     rnd.seed(42)
-    causalx.set_random_seed(42)
+    castlex.set_random_seed(42)
 
     #
     # Load graphs
@@ -94,7 +94,8 @@ def main():
     # Create HDF5 container
     #
 
-    os.remove('data/graphs-datasets.hdf5')
+    if os.path.exists('data/graphs-datasets.hdf5'):
+        os.remove('data/graphs-datasets.hdf5')
     container = h5py.File('data/graphs-datasets.hdf5', 'w')
 
     #

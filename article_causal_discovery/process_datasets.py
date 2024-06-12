@@ -14,7 +14,7 @@ import numpyx as npx
 import stdlib
 import stdlib.jsonx as jsonx
 import stdlib.loggingx as logging
-from stdlib import is_instance
+from stdlib import is_instance, as_list
 
 log: logging.Logger = logging.getLogger("main")
 
@@ -30,15 +30,10 @@ GRAPH_DATASETS = "data/graphs-datasets.hdf5"
 
 # Graph orders. In theory this list is not necessary,
 # but it is used for historical reasons
-GRAPH_ORDERS = ["2", "3", "4", "5", "10", "15", "20", "25"]
+GRAPH_ORDERS = [2, 3, 4, 5, 10, 15, 20, 25]
 
 # Dictionary containing the algorithms' configurations
-GRAPH_ALGORITHMS: dict[str, dict] = jsonx.load(GRAPH_ALGO_CONFIG)
-
-# Extra configurations for specific algorithms
-DATA_PREPARATION = {
-    "ANMNonlinear": ["float64", "mean0"],
-}
+GRAPH_ALGORITHMS: dict[str, dict] = {}    # jsonx.load(GRAPH_ALGO_CONFIG)
 
 # All datasets have 10000 records. The can be considered as the
 # concatenation of 10 datasets of 1000 records each one.
@@ -77,8 +72,10 @@ def create_algo(algo_name: str, order: int = 0) -> castle.common.base.BaseLearne
     """
     algo_info = GRAPH_ALGORITHMS[algo_name]
     klass = algo_info["class"]
+
     if isinstance(klass, str):
         klass = stdlib.import_from(klass)
+
     sorder = str(order)
     if sorder in algo_info:
         kwparams = algo_info[sorder]
@@ -86,15 +83,17 @@ def create_algo(algo_name: str, order: int = 0) -> castle.common.base.BaseLearne
         kwparams = algo_info["0"]
     else:
         kwparams = {} | GRAPH_ALGORITHMS[algo_name]
-        # remove all extra parameters:
-        for key in ["class"] + GRAPH_ORDERS:
-            if key in kwparams:
-                del kwparams[key]
+
+    # remove all extra parameters:
+    for key in ["class", "data-preparation"] + list(map(str, GRAPH_ORDERS)):
+        if key in kwparams:
+            del kwparams[key]
     # end
+
     return klass(**kwparams)
 
 
-def prepare_data(algo_name, X: np.ndarray) -> np.ndarray:
+def prepare_data(algo_name: str, X: np.ndarray) -> np.ndarray:
     """
     Some algorithms require the data in some special format.
     For example:
@@ -105,11 +104,13 @@ def prepare_data(algo_name, X: np.ndarray) -> np.ndarray:
     :param X: dataset
     :return: the processed dataset
     """
-
-    if algo_name not in DATA_PREPARATION:
+    algo_info = GRAPH_ALGORITHMS[algo_name]
+    if "data-preparation" not in algo_info:
         return X
 
-    for method in DATA_PREPARATION[algo_name]:
+    data_preparation = as_list(algo_info["data-preparation"])
+
+    for method in data_preparation:
         if method == "mean0":
             # mean=0/standard_deviation=1
             scaler = npx.scalers.StandardScaler()
@@ -127,7 +128,7 @@ def process_algorithms():
             continue
 
         log.info("------------------------------------------------------------")
-        log.info("-", algo_name)
+        log.info(f"- {algo_name}")
         log.info("------------------------------------------------------------")
 
         # create the directory containing the results
@@ -155,13 +156,16 @@ def list_graph_names(n_parts: int = 1) -> Union[list[str], list[list[str]]]:
         more or less all Python instances will process the assigned graphs in
         similar time.
     """
-    log.info('Collect graphs to process')
+    log.info('collect graphs to process')
 
     with h5py.File(GRAPH_DATASETS, "r") as c:
         # collect the graph names
         graph_names = []
         for order in GRAPH_ORDERS:
-            graphs_list = c[order]
+            log.info(f'... order {order}')
+            gkey = str(order)
+            if gkey not in c: continue
+            graphs_list = c[gkey]
 
             for graph_id in graphs_list.keys():
                 graph_info = graphs_list[graph_id]
@@ -176,6 +180,7 @@ def list_graph_names(n_parts: int = 1) -> Union[list[str], list[list[str]]]:
             # end
         # end
     # end
+    log.info(f'found {len(graph_names)} graphs')
 
     # sequential processing
     if n_parts <= 1:
@@ -245,7 +250,7 @@ def process_graphs(n_jobs=0):
 
 
 def sequential_process_graphs(algo_name: str, graphs_to_process: list[str], graphs_processed: list[str]):
-    log.info(f"Process sequential started on {len(graphs_to_process)} graphs")
+    log.info(f"process sequential started on {len(graphs_to_process)} graphs")
     c = h5py.File(GRAPH_DATASETS, "r")
 
     graph_predictions_name: str = \
@@ -281,7 +286,7 @@ def parallel_process_graphs(algo_name: str, process_id: int, graph_names: list[s
     global log
     logging.config.fileConfig("logging_config.ini")
     log = logging.getLogger(f"main.p{process_id:02}")
-    log.info(f"Process {process_id:02} started on {len(graph_names)} graphs")
+    log.info(f"process {process_id:02} started on {len(graph_names)} graphs")
 
     # load the datasets
     c = h5py.File(GRAPH_DATASETS, "r")
@@ -309,7 +314,9 @@ def parallel_process_graphs(algo_name: str, process_id: int, graph_names: list[s
         # break
     # end
 
-    log.info(f"Done")
+    log.info("------------------------------------------------------------")
+    log.info(f"- done")
+    log.info("------------------------------------------------------------")
     return
 # end
 
@@ -346,10 +353,11 @@ def process_graph(algo_name: str, graph_info: h5py.Group, graph_predictions_name
             s = i*DS_PART_LEN
             X = datasets[s:s+DS_PART_LEN, :]
 
-            # create the algorithm for graphs with the specified order
-            algo = create_algo(algo_name, order=n)
             # some algorithms need data in some special format
             X = prepare_data(algo_name, X)
+
+            # create the algorithm for graphs with the specified order
+            algo = create_algo(algo_name, order=n)
 
             try:
                 algo.learn(X)
@@ -359,7 +367,6 @@ def process_graph(algo_name: str, graph_info: h5py.Group, graph_predictions_name
             except Exception as e:
                 log.full_error(e, f"Unable to analyze the data {name}/{sem_type} using {algo_name}")
                 CM[i, :, :] = 0
-
             # break   # FILTER
         # end
         # dset = p.create_dataset(f"{name}/{algo_name}/{sem_type}", (nds, n, n), dtype=CM.dtype, data=CM)
@@ -377,7 +384,7 @@ def process_graph(algo_name: str, graph_info: h5py.Group, graph_predictions_name
             CM=CM
         ))
         # break       # FILTER
-    # break           # FILTER
+    # end
 
     p = h5py.File(graph_predictions_name, "a")
     pred_info = p.create_group(name)
@@ -408,7 +415,6 @@ def load_configuration():
     global GRAPH_DATASETS
     global GRAPH_ORDERS
     global GRAPH_ALGORITHMS
-    global DATA_PREPARATION
     global DS_LEN
     global DS_PART_LEN
     global N_JOBS
@@ -421,7 +427,6 @@ def load_configuration():
     GRAPH_ALGO_CONFIG = config["graph-algo-config"]
     GRAPH_DATASETS = config["graph-datasets"]
     GRAPH_ORDERS = config["graph-orders"]
-    DATA_PREPARATION = config["data-preparation"]
     DS_LEN = config["dataset-length"]
     DS_PART_LEN = config["dataset-part-length"]
     N_JOBS = config["n-jobs"]
@@ -439,6 +444,7 @@ def main():
     log.info(f"nx: {nx.__version__}")
     log.info(f"castle: {castle.__version__}")
     log.info(f"torch: {torch.__version__}")
+    log.info("starting dataset processing ...")
 
     # Castle:
     # You can use `os.environ['CASTLE_BACKEND'] = backend` to set the backend(`pytorch` or `mindspore`).

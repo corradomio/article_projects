@@ -1,14 +1,12 @@
 {
-    "graph-algo-config": "data/graphs-algorithms.json",
-    "graph-datasets": "data/graphs-datasets.hdf5",
+    "graph-algo-config": "graphs-algorithms.json",
+    "graph-datasets_old": "data/graphs-datasets.hdf5",
+    "graph-datasets": "d:/datasets/graphs-datasets.hdf5",
     "graph-orders": [2,3,4,5,10,15,20,25],
-    "data-preparation": {
-        "ANMNonlinear": ["float64", "mean0"]
-    },
     "dataset-length": 10000,
     "dataset-part-length": 1000,
-    "n-jobs": 10,
-    "n-parts": 10,
+    "n-jobs": 3,
+    "n-parts": 3,
     "exclude-graph-degrees": [15, 20, 25],
     "exclude-sem-types": ["logistic"]
 }

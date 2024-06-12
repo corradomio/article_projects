@@ -61,7 +61,8 @@ class DAG(object):
 
     @staticmethod
     def _graph_to_adjmat(G):
-        return nx.to_numpy_matrix(G)
+        # return nx.to_numpy_matrix(G)
+        return nx.to_numpy_array(G)
 
     @staticmethod
     def _BtoW(B, d, w_range):
@@ -560,7 +561,8 @@ class Topology(object):
         assert n_nodes > 0, 'The number of nodes must be greater than 0.'
         creation_prob = (2*n_edges)/(n_nodes**2)
         G = nx.erdos_renyi_graph(n=n_nodes, p=creation_prob, seed=seed)
-        B = nx.to_numpy_matrix(G)
+        # B = nx.to_numpy_matrix(G)
+        B = nx.to_numpy_array(G)
         return B
 
 

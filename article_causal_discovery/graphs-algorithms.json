@@ -6,6 +6,7 @@
         "class": "castle.algorithms.PC"
     },
     "#ANMNonlinear": {
+        "data-preparation": ["float64", "mean0"],
         "class": "castle.algorithms.ANMNonlinear"
     },
     "#DirectLiNGAM": {
@@ -53,7 +54,7 @@
     "#GES": {
         "class": "castle.algorithms.GES"
     },
-    "GOLEM": {
+    "#GOLEM": {
         "class": "castle.algorithms.GOLEM",
         "2": {
             "checkpoint_iter": 250,
@@ -90,6 +91,33 @@
     },
     "#Notears": {
         "class": "castle.algorithms.Notears",
-        "max_iter": 100
+        "2": {
+            "max_iter": 200
+        },
+        "3": {
+            "max_iter": 300
+        },
+        "4": {
+            "max_iter": 400
+        },
+        "5": {
+            "max_iter": 500
+        },
+        "10": {
+            "max_iter": 1000
+        },
+        "15": {
+            "max_iter": 1500
+        },
+        "20": {
+            "max_iter": 2000
+        },
+        "25": {
+            "max_iter": 2500
+        }
+    },
+    "NotearsNonlinear": {
+        "data-preparation": ["float64", "mean0"],
+        "class": "castle.algorithms.NotearsNonlinear"
     }
 }
