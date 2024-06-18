@@ -1,6 +1,6 @@
 from typing import Union
 
-from . import simulator as sim
+from castle.datasets import simulator as sim
 import numpy as np
 import networkx as nx
 import scipy

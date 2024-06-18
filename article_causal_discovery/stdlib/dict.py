@@ -76,6 +76,10 @@ class dict(BuiltinDict):
     def __setattr__(self, key, value):
         return self.__setitem__(key, value)
 
+    def __class_getitem__(cls, item):
+        res = super().__class_getitem__(item)
+        return res
+
     def get(self, key, defval=None):
         """
         Return the value of the specified key or the default value if not present
@@ -208,7 +212,7 @@ class dict(BuiltinDict):
         Note that:
 
             list(dict)      -> [key1, ...]
-            dict,keys()     -> dict_keys([key1, ...])
+            dict.keys()     -> dict_keys([key1, ...])
             dict.values()   -> dict_values([value1, ...])
             dict.to_list()  -> [(key, value1), ...]
 
@@ -227,3 +231,17 @@ def reverse_dict(d: Union[BuiltinDict, dict]) -> dict:
     drev = {d[k]: k for k in d}
     assert len(d) == len(drev)
     return drev
+
+
+# ---------------------------------------------------------------------------
+# Extends 'is_instance'
+# ---------------------------------------------------------------------------
+
+from . import is_instance as iii
+
+iii.IS_INSTANCE_OF['stdlib.dict.dict'] = iii.IsDict
+
+
+# ---------------------------------------------------------------------------
+# Extends 'is_instance'
+# ---------------------------------------------------------------------------

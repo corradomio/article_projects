@@ -54,8 +54,37 @@
     "#GES": {
         "class": "castle.algorithms.GES"
     },
+    "#Notears": {
+        "class": "castle.algorithms.Notears",
+        "2": {
+            "max_iter": 200
+        },
+        "3": {
+            "max_iter": 300
+        },
+        "4": {
+            "max_iter": 400
+        },
+        "5": {
+            "max_iter": 500
+        },
+        "10": {
+            "max_iter": 1000
+        },
+        "15": {
+            "max_iter": 1500
+        },
+        "20": {
+            "max_iter": 2000
+        },
+        "25": {
+            "max_iter": 2500
+        }
+    },
+
     "#GOLEM": {
         "class": "castle.algorithms.GOLEM",
+        "device_type": "gpu",
         "2": {
             "checkpoint_iter": 250,
             "num_iter": 500
@@ -89,35 +118,60 @@
             "num_iter": 6250
         }
     },
-    "#Notears": {
-        "class": "castle.algorithms.Notears",
-        "2": {
-            "max_iter": 200
-        },
-        "3": {
-            "max_iter": 300
-        },
-        "4": {
-            "max_iter": 400
-        },
-        "5": {
-            "max_iter": 500
-        },
-        "10": {
-            "max_iter": 1000
-        },
-        "15": {
-            "max_iter": 1500
-        },
-        "20": {
-            "max_iter": 2000
-        },
-        "25": {
-            "max_iter": 2500
-        }
-    },
-    "NotearsNonlinear": {
+
+    "#NotearsNonlinear": {
+        "note": ["Too slow"],
         "data-preparation": ["float64", "mean0"],
-        "class": "castle.algorithms.NotearsNonlinear"
+        "class": "castle.algorithms.NotearsNonlinear",
+        "device_type": "gpu"
+    },
+    "#PNL": {
+        "note": ["Too slow"],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.PNL",
+        "device_type": "gpu"
+    },
+    "#TTPM": {
+        "note": ["TypeError: TTPM.__init__() missing 1 required positional argument: 'topology_matrix'"],
+        "class": "castle.algorithms.TTPM",
+        "device_type": "gpu"
+    },
+    "#CORL": {
+        "note": ["It is slow: 1000 iters?"],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.CORL",
+        "device_type": "gpu"
+    },
+    "#DAG_GNN": {
+        "note": ["Too slow"],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.DAG_GNN",
+        "device_type": "gpu"
+    },
+    "#GAE": {
+        "note": [
+            "RuntimeError: Expected all tensors to be on the same device, but found at least two devices",
+            "cuda:0 and cpu! (when checking argument for argument mat1 in method wrapper_CUDA_addmm)"
+        ],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.GAE",
+        "device_type": "gpu"
+    },
+    "#GraNDAG": {
+        "note": ["TypeError: GraNDAG.__init__() missing 1 required positional argument: 'input_dim'"],
+        "class": "castle.algorithms.GraNDAG",
+        "device_type": "gpu"
+    },
+    "#MCSL": {
+        "note": ["Very slow"],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.MCSL",
+        "device_type": "gpu"
+    },
+    "#RL": {
+        "note": ["It works"],
+        "data-preparation": ["float64"],
+        "class": "castle.algorithms.RL",
+        "device_type": "gpu"
     }
 }

@@ -70,9 +70,11 @@ HDF5 predictions
             'm':                n of edges (size)
             'adjacency_matrix': adjacency matrix (n x n)
             'wl_hash':          Weisfeiler Leman hash
-
-        <sem_type>:             dataset (10 x n x n)
-            attrs:
-                'method':       method ('linear' | 'nonlinear')
-                'sem_type':     sem_type
+        <algoritm>              Causal Discovery algorithm
+            <sem_type>:         Dataset generation method
+                                dataset (10 x n x n)
+                attrs:
+                    'algorithm':    same than <algoritm>
+                    'method':       method ('linear' | 'nonlinear')
+                    'sem_type':     sem_type
 
