@@ -27,7 +27,7 @@ class PlotGraph:
     #     'm': m,
     #     'adjacency_matrix': adjacency_matrix,
     #     'causal_discovery_algorithm': algorithm,
-    #     'data_generation_method': (method, semtype),
+    #     'data_generation_method': (method, sem_type),
     #     'dataset_index': i,
     #     'causal_adjacency_matrix': causal_dag,
     # }

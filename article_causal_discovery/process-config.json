@@ -1,11 +1,11 @@
 {
     "graph-algo-config": "graphs-algorithms.json",
-    "graph-datasets": "d:/datasets/graphs-datasets-*.hdf5",
+    "graph-datasets": "data/graphs-datasets.hdf5",
     "graph-orders": [2,3,4,5,6,7,8,9,10],
     "dataset-length": 10000,
     "dataset-part-length": 1000,
-    "n-jobs": 1,
+    "n-jobs": 8,
     "n-parts": 1,
-    "exclude-graph-degrees": [15, 20, 25],
+    "exclude-graph-degrees": [],
     "exclude-sem-types": ["logistic"]
 }

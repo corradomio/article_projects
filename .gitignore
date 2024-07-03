@@ -7,3 +7,5 @@ _suspended
 *.bak
 * - Copy*
 *.zip
+*.hdf5
+*.json

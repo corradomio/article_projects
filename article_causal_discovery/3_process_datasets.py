@@ -438,6 +438,9 @@ def load_configuration():
     EXCLUDE_SEM_TYPES = config["exclude-sem-types"]
 
     GRAPH_ALGORITHMS = jsonx.load(GRAPH_ALGO_CONFIG)
+
+    if N_PARTS < N_JOBS:
+        N_PARTS = N_JOBS
 # end
 
 

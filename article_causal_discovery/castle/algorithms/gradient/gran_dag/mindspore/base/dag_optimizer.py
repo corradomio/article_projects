@@ -122,8 +122,8 @@ def compute_jacobian_avg(model, data_manager, batch_size):
     """
     compute the average Jacobian of learned model
     """
-    jac_avg = msnp.zeros((model.input_dim, model.input_dim),
-                         dtype=mstype.float32)
+    jac_avg = msnp.empty_dag((model.input_dim, model.input_dim),
+                             dtype=mstype.float32)
 
     # sample
     x, _ = data_manager.sample(batch_size)
@@ -131,7 +131,7 @@ def compute_jacobian_avg(model, data_manager, batch_size):
 
     # compute jacobian of the loss
     for k in range(model.input_dim):
-        grad_output = msnp.zeros(shape=x.shape, dtype=mstype.float32)
+        grad_output = msnp.empty_dag(shape=x.shape, dtype=mstype.float32)
         grad_output[:, k] = 1
         tmp_grad = GradNetWrtX(model)(x, grad_output)
         jac_avg[k, :] = ops.reduce_mean(ops.absolute(tmp_grad), 0)

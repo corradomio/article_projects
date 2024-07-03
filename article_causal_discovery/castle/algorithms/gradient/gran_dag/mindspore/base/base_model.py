@@ -60,10 +60,10 @@ class BaseModel(nn.Cell):
         for i, item in enumerate(layer_list[:-1]):
             in_dim = item
             out_dim = layer_list[i + 1]
-            tmp_weights.append(Parameter(msnp.zeros(
+            tmp_weights.append(Parameter(msnp.empty_dag(
                 (self.input_dim, out_dim, in_dim), dtype=mstype.float32),
                 requires_grad=True, name='w'+str(i)))
-            tmp_biases.append(Parameter(msnp.zeros(
+            tmp_biases.append(Parameter(msnp.empty_dag(
                 (self.input_dim, out_dim), dtype=mstype.float32),
                 requires_grad=True, name='b'+str(i)))
 
@@ -125,7 +125,7 @@ class BaseModel(nn.Cell):
         -------
         expm: matrix exponent value of A
         """
-        expm_val = msnp.zeros(matrix.shape, dtype=mstype.float32)
+        expm_val = msnp.empty_dag(matrix.shape, dtype=mstype.float32)
         eye_mat = msnp.eye(matrix.shape[0], dtype=mstype.float32)
         k = 1.0
 
@@ -232,7 +232,7 @@ class BaseModel(nn.Cell):
                 self.weights[i][node] = tmp_w
             for i, b in enumerate(self.biases):
                 b = b[node]
-                tmp_b = msnp.zeros((b.shape[0]), dtype=mstype.float32)
+                tmp_b = msnp.empty_dag((b.shape[0]), dtype=mstype.float32)
                 self.biases[i][node] = tmp_b
 
     def get_parameters(self, mode="wbx"):

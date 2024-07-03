@@ -1,7 +1,7 @@
 import logging.config
-from path import Path as path
 import os
 import h5py
+from path import Path as path
 from stdlib.tprint import tprint
 
 

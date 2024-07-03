@@ -1,3 +1,4 @@
+import stdlib.loggingx as logging
 import h5py
 from path import Path as path
 from stdlib.tprint import tprint
@@ -7,22 +8,52 @@ from joblib import Parallel, delayed
 def null_callback(path, info): pass
 
 
+ALGORITHMS = {
+    'PC': 0,
+    'DirectLiNGAM': 1,
+    'ICALiNGAM': 2,
+    'GES': 3,
+    'GOLEM': 4,
+    'Notears': 5,
+}
+
+# selected: PC, DirectLiNGAM, ICALiNGAM, GES, GOLEM, Notears
+
+
+# linear:       gauss, exp, gumbel, uniform, logistic
+# nonlinear:    mlp, mim, gp, gp-add, quadratic
+# selected:     exp, gauss, gumel, uniform,mim, mlp, quadratic
+
+
+SEM_TYPES = {
+    'exp': 0,           # linear
+    'gauss': 1,         # linear
+    'gumbel': 2,        # linear
+    'uniform': 3,       # linear
+    'mim': 4,           # nonlinear
+    'mlp': 5,           # nonlinear
+    'quadratic': 6,     # nonlinear
+}
+
+
 def foreach_hdf(
     dir,
     callback,
     max_degree,
     skip_algos,
-    skip_methods
+    skip_methods,
+    log
 ):
     if dir.stem in skip_methods:
         return
 
-    tprint("...", dir.stem, force=True)
+    log.info(f"... {dir.stem}")
 
     # scan the files
     for hdf in dir.files("*.hdf5"):
         data = h5py.File(hdf, "r")
         # scan the graph degrees
+        # tprint(f"... ... {hdf.stem}", force=True)
 
         for sdeg in data:
             graph_degree = int(sdeg)
@@ -39,7 +70,7 @@ def foreach_hdf(
 
                 assert n == graph_degree
 
-                tprint("... ... ...", gid, ":", (n, m))
+                log.infot(f"... ... {gid}: { (n, m)}")
 
                 # scan the causal discovery algorithms
                 for cdalgo in ginfo.keys():
@@ -51,13 +82,13 @@ def foreach_hdf(
                         causal_dags = cdinfo[dgmethod]
                         algorithm = causal_dags.attrs['algorithm']
                         method = causal_dags.attrs['method']
-                        semtype = causal_dags.attrs['sem_type']
+                        sem_type = causal_dags.attrs['sem_type']
                         data_shape = causal_dags.shape
 
                         if algorithm in skip_algos: continue
                         if method in skip_methods: continue
 
-                        # tprint("... ... ... ... ...", method, semtype, force=True)
+                        # tprint("... ... ... ... ...", method, sem_type, force=True)
 
                         for i in range(data_shape[0]):
                             causal_dag = causal_dags[i]
@@ -69,7 +100,12 @@ def foreach_hdf(
                                          'm': m,
                                          'adjacency_matrix': adjacency_matrix,
                                          'causal_discovery_algorithm': algorithm,
-                                         'data_generation_method': (method, semtype),
+                                         'data_generation_method': (method, sem_type),
+                                         'method': method,
+                                         'sem_type': sem_type,
+
+                                         'algorithm_index': ALGORITHMS[algorithm],
+                                         'sem_index': SEM_TYPES[sem_type],
                                          'dataset_index': i,
                                          'causal_adjacency_matrix': causal_dag,
                                      })
@@ -89,14 +125,15 @@ def foreach_dataset(
     skip_algos=(),
     skip_methods=()
 ):
-    tprint("Sequential start processing ... ", force=True)
+    log = logging.getLogger('foreach')
+    log.info("Sequential start processing ... ")
 
     # scan the dirs
     for dir in path(root).dirs():
         if dir.stem not in skip_algos:
-            foreach_hdf(dir, callback, max_degree, skip_algos, skip_methods)
+            foreach_hdf(dir, callback, max_degree, skip_algos, skip_methods, log)
 
-    tprint("Done", force=True)
+    log.info("Done", force=True)
 # end
 
 

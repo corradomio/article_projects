@@ -1,15 +1,21 @@
 {
     "#note": {
-        "doc": "names starting with '#' are skipped"
+        "doc": [
+            "names starting with '#' are skipped",
+            "algorithms: DirectLiNGAM, ICALiNGAM, GES, GOLEM, Notears, PC"
+        ]
     },
     "#PC": {
         "class": "castle.algorithms.PC"
     },
     "#ANMNonlinear": {
+        "note": [
+            "very slow"
+        ],
         "data-preparation": ["float64", "mean0"],
         "class": "castle.algorithms.ANMNonlinear"
     },
-    "#DirectLiNGAM": {
+    "DirectLiNGAM": {
         "class": "castle.algorithms.DirectLiNGAM"
     },
     "#ICALiNGAM": {

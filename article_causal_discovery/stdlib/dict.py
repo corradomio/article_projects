@@ -51,6 +51,11 @@ from typing import Union
 
 BuiltinDict = dict
 
+#
+#   dict[item]      __get/setitem__
+#   dict.attr       __get/setattr_
+#
+
 
 class dict(BuiltinDict):
 
@@ -62,6 +67,10 @@ class dict(BuiltinDict):
         else:
             super().__init__(seq, **kwargs)
 
+    #
+    # dict[item]
+    #
+
     def __getitem__(self, item):
         value = super().__getitem__(item)
         # convert builtin_dict into this dict
@@ -70,16 +79,31 @@ class dict(BuiltinDict):
             self.__setitem__(item, value)
         return value
 
-    def __getattr__(self, item):
-        return self.__getitem__(item)
+    #
+    # dict.attr
+    # Note: it is NOT possible to redefine xxxattr() into xxxitem()
+    # because this BREAKS the interface of 'base.dict' with 'strange'
+    # side effects.
+    # this can be done in 'specialized' classed with a 'specialized'
+    # usage
 
-    def __setattr__(self, key, value):
-        return self.__setitem__(key, value)
+    # def __getattr__(self, item):
+    #     return self.__getitem__(item)
+
+    # def __setattr__(self, key, value):
+    #     return self.__setitem__(key, value)
+
+    # def __delattr__(self, item):
+    #     return self.__delitem__(item)
 
     def __class_getitem__(cls, item):
         res = super().__class_getitem__(item)
         return res
 
+    #
+    #   get/set
+    #   select(select/exclude)
+    #
     def get(self, key, defval=None):
         """
         Return the value of the specified key or the default value if not present
@@ -132,7 +156,7 @@ class dict(BuiltinDict):
         d[key] = value
         return None
 
-    def select(self, keys=None, mode='select', defval=None):
+    def select(self, keys=None, mode='select'):
         """
         Select a subset of keys
         :param keys: list of keys to select (in alternative to 'exclude')
@@ -143,11 +167,11 @@ class dict(BuiltinDict):
         selected = dict()
         if mode == 'select':
             for key in keys:
-                selected.set(key, self.get(key, defval))
+                selected.set(key, self.get(key))
         elif mode == 'exclude':
             for key in self.keys():
                 if key not in keys:
-                    selected.set(key, self.get(key, defval))
+                    selected.set(key, self.get(key))
         else:
             raise ValueError(f"Unsupported mode {mode}. Supported: 'select', 'exclude'")
         return selected
@@ -220,6 +244,22 @@ class dict(BuiltinDict):
         """
         return [(key, self.__getitem__(key)) for key in self.keys()]
 # end
+
+
+class configuration(dict):
+
+    def __init__(self, seq=None, **kwargs):
+        super().__init__(seq, **kwargs)
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)
+
+    def __setattr__(self, key, value):
+        return self.__setitem__(key, value)
+
+    def __delattr__(self, item):
+        return self.__delitem__(item)
+
 
 
 def reverse_dict(d: Union[BuiltinDict, dict]) -> dict:

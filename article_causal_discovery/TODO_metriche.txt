@@ -1,0 +1,10 @@
+hamming distance
+d-separation distance
+d-connessione distance
+influenza diretta potenze matrice di adiacenza/normalizzata/distanza di hamming) (I+A)^(n-1)
+distanza markov-chain sul grafo
+
+-------------------------------
+
+distanza targetted
+
