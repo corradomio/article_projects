@@ -1,3 +1,4 @@
+import logging.config
 import logging.handlers
 import pandas
 import pandasx as pdx
@@ -6,8 +7,8 @@ import stdlib
 # import stdlib.loggingx as logging
 from stdlib import qualified_name
 from sktime.forecasting.arima import AutoARIMA
-from sktimex.darts.arima import ARIMA
-from sktimex.darts.linear import LinearForecaster as DartsLinearForecaster
+from sktimex.forecasting.darts.arima import ARIMA
+from sktimex.forecasting.darts.linear import Linear as DartsLinearForecaster
 from sktimex.forecasting.scikit import ScikitForecaster
 from sktimex.forecasting.linear import LinearForecaster
 from sktimex.forecasting.lnn import LinearNNForecaster
@@ -27,6 +28,7 @@ TARGET = 'import_aed'
 
 
 FH = logging.handlers.RotatingFileHandler
+
 
 #
 # D:\Projects.github\python_projects\check_timeseries_nn\plots\import_aed
@@ -61,7 +63,7 @@ def use_scikit_forecaster(df_past, df_hist, df_test):
 
     model = ScikitForecaster(
         window_length=24,
-        prediction_length=1
+        prediction_length=12
     )
 
     model.fit(y_train, X_train)
@@ -181,9 +183,10 @@ def use_sktime_arima_forecaster(df_past, df_hist, df_test, flavour=None):
     X_train, y_train = pdx.xy_split(df_past, target=TARGET)
     X_hist, y_hist, X_test, y_test = pdx.xy_split(df_hist, df_test, target=TARGET)
 
-    model = ScikitForecaster(
-        estimator=qualified_name(AutoARIMA)
-    )
+    # model = ScikitForecaster(
+    #     estimator=qualified_name(AutoARIMA)
+    # )
+    model = AutoARIMA()
 
     model.fit(y_train, X_train)
 
@@ -202,13 +205,14 @@ def use_darts_arima_forecaster(df_past, df_hist, df_test, flavour=None):
     X_hist, y_hist, X_test, y_test = pdx.xy_split(df_hist, df_test, target=TARGET)
 
     model = DartsLinearForecaster(
-
+        lags=36,
+        output_chunk_length=6
     )
 
     model.fit(y_train, X_train)
 
     fh = stdlib.lrange(1, 13)
-    y_pred = model.predict_history(fh, X=X_test, yh=y_hist, Xh=X_hist)
+    y_pred = model.predict(fh, X=X_test, yh=y_hist, Xh=X_hist)
 
     sktimex.utils.plot_series(y_train, y_hist, y_test, y_pred, labels=['train', 'hist', 'test', 'pred'])
     sktimex.utils.show()
@@ -245,12 +249,12 @@ def main():
     df_past, df_future = pdx.train_test_split(df, train_size=.50)
     df_hist, df_test = pdx.train_test_split(df_future, test_size=12)
 
-    # use_scikit_forecaster(df_past, df_hist, df_test)
+    use_scikit_forecaster(df_past, df_hist, df_test)
     # use_linear_forecaster(df_past, df_hist, df_test)
     # use_nnlin_forecaster(df_past, df_hist, df_test)
     # use_rnn_forecaster(df_past, df_hist, df_test)
-    # use_arima_forecaster(df_past, df_hist, df_test)
-    use_darts_arima_forecaster(df_past, df_hist, df_test)
+    # use_sktime_arima_forecaster(df_past, df_hist, df_test)
+    # use_darts_arima_forecaster(df_past, df_hist, df_test)
 
     pass
 

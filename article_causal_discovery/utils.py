@@ -133,7 +133,7 @@ def foreach_dataset(
         if dir.stem not in skip_algos:
             foreach_hdf(dir, callback, max_degree, skip_algos, skip_methods, log)
 
-    log.info("Done", force=True)
+    log.info("Done")
 # end
 
 

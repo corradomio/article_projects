@@ -3,7 +3,7 @@ import pandasx as pdx
 import numpy as np
 
 from stdlib import lrange
-from sktimex.forecasting.const import ConstantForecaster
+from sktimex.forecasting.zero import ZeroForecaster
 from sktimex.forecasting.linear import LinearForecaster
 from sktimex.forecasting.scikit import ScikitForecaster
 
