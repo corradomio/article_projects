@@ -2,3 +2,5 @@ data
 *.log
 *.zip
 plots
+*.csv
+lightning_logs

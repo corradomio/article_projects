@@ -1,54 +1,27 @@
 import logging.config
 import logging.handlers
+import warnings
+
 import pandas
+from sktime.forecasting.arima import AutoARIMA
+
 import pandasx as pdx
 import sktimex
 import stdlib
-# import stdlib.loggingx as logging
-from stdlib import qualified_name
-from sktime.forecasting.arima import AutoARIMA
-from sktimex.forecasting.darts.arima import ARIMA
-from sktimex.forecasting.darts.linear import Linear as DartsLinearForecaster
-from sktimex.forecasting.scikit import ScikitForecaster
-from sktimex.forecasting.linear import LinearForecaster
-from sktimex.forecasting.lnn import LinearNNForecaster
-from sktimex.forecasting.rnn import RNNLinearForecaster
 from sktimex.forecasting.cnn import CNNLinearForecaster
+from sktimex.forecasting.darts.linear import Linear as DartsLinearForecaster
+from sktimex.forecasting.linear import LinearForecaster
+from sktimex.forecasting.lnn import LNNLinearForecaster
+from sktimex.forecasting.rnn import RNNLinearForecaster
+from sktimex.forecasting.scikit import ScikitForecaster
 
-from stdlib.tprint import tprint
-
-import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning)
 
 log = None
 
 
-TARGET = 'import_aed'
-
-
-FH = logging.handlers.RotatingFileHandler
-
-
-#
-# D:\Projects.github\python_projects\check_timeseries_nn\plots\import_aed
-#
-
-def plot_ts(df, group: tuple):
-    tprint(group)
-    gname = group[0].replace('/', '_').replace(' ', '_')
-    y = df[TARGET]
-    sktimex.utils.plot_series(y, labels=['data'], title=group[0])
-
-    fname = f"plots/{gname}.png"
-    sktimex.utils.savefig(fname, dpi=300)
-    sktimex.utils.close()
-
-
-def plot_time_series(df):
-    # plot the ts
-    pdx.groups_apply(df, plot_ts)
-    return
+TARGET = 'import_kg'
 
 
 # ---------------------------------------------------------------------------
@@ -103,7 +76,7 @@ def use_nnlin_forecaster(df_past, df_hist, df_test):
     X_train, y_train = pdx.xy_split(df_past, target=TARGET)
     X_hist, y_hist, X_test, y_test = pdx.xy_split(df_hist, df_test, target=TARGET)
 
-    model = LinearNNForecaster(
+    model = LNNLinearForecaster(
         lags=24,
         tlags=12,
         method='standard',
