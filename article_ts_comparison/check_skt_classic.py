@@ -18,7 +18,7 @@ warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning
 
 TARGET = "import_kg"
 USED_LIBRARY = "skt"
-RESULT_FILE = "wape_skt_garch.csv"
+RESULT_FILE = "wape_skt_classic.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -38,7 +38,8 @@ def compare_models(g, Xtr, ytr, Xte, yte):
     yte_scaled = yscaler.transform(yte)
     fh = ForecastingHorizon(yte.index)
 
-    # Garch[1]
+    # -- Garch[1]
+
     use_model(g, "garch-1-1", sktime.forecasting.arch.StatsForecastGARCH(
         p=1, q=1
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
@@ -51,7 +52,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         p=12, q=1
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
-    # Garch[2]
+    # -- Garch[2]
 
     use_model(g, "garch-1-2", sktime.forecasting.arch.StatsForecastGARCH(
         p=1, q=2
@@ -63,6 +64,13 @@ def compare_models(g, Xtr, ytr, Xte, yte):
 
     use_model(g, "garch-12-2", sktime.forecasting.arch.StatsForecastGARCH(
         p=12, q=2
+    ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
+
+    # -- AUtoARIMA
+
+    # AutoARIMA
+    use_model(g, "auto_arima", sktime.forecasting.arima.AutoARIMA(
+
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     pass

@@ -66,7 +66,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nlinear-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -75,7 +75,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nlinear-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -84,7 +84,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nlinear-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -93,7 +93,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nlinear-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -104,7 +104,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "autoformer-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -113,7 +113,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "autoformer-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -122,7 +122,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "autoformer-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -131,7 +131,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "autoformer-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -142,7 +142,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "fedformer-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -151,7 +151,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "fedformer-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -160,7 +160,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "fedformer-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -169,7 +169,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "fedformer-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -180,7 +180,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "informer-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -189,7 +189,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "informer-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -198,7 +198,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "informer-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -207,7 +207,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=50
+        max_steps=100
     )
     use_model(g, "informer-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -218,7 +218,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "bitcn-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -227,7 +227,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "bitcn-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -236,7 +236,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "bitcn-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -245,7 +245,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "bitcn-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -256,7 +256,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "deepnpts-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -265,7 +265,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "deepnpts-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -274,7 +274,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "deepnpts-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -283,7 +283,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "deepnpts-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -294,7 +294,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "dilated_rnn-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -303,7 +303,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "dilated_rnn-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -312,7 +312,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "dilated_rnn-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -321,7 +321,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "dilated_rnn-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -332,7 +332,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "itrasformer-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -341,7 +341,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "itrasformer-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -350,7 +350,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "itrasformer-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -359,7 +359,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "itrasformer-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -370,7 +370,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "gru-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -379,7 +379,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "rnn-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -388,7 +388,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "lstm-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -399,7 +399,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "gru-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -408,7 +408,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "rnn-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -417,7 +417,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "lstm-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -428,7 +428,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "gru-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -437,7 +437,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "rnn-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -446,7 +446,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "lstm-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -457,7 +457,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "gru-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -466,7 +466,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "rnn-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -475,7 +475,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "lstm-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -486,7 +486,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeats-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -495,7 +495,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeatsx-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -506,7 +506,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeats-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -515,7 +515,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeatsx-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -526,7 +526,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeats-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -535,7 +535,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeatsx-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -546,7 +546,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeats-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -555,7 +555,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nbeatsx-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -566,7 +566,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nhits-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -575,7 +575,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nhits-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -584,7 +584,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nhits-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -593,7 +593,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "nhits-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -604,7 +604,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "patchtst-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -613,7 +613,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "patchtst-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -622,7 +622,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "patchtst-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -631,7 +631,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "patchtst-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -642,7 +642,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "tcn-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -651,7 +651,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "tcn-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -660,7 +660,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "tcn-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -669,7 +669,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=500
+        max_steps=100
     )
     use_model(g, "tcn-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -718,7 +718,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=1,
         early_stop_patience_steps=10,
         val_size=1,
-        max_steps=300
+        max_steps=100
     )
     use_model(g, "tide-1", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -727,7 +727,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=3,
         early_stop_patience_steps=10,
         val_size=3,
-        max_steps=300
+        max_steps=100
     )
     use_model(g, "tide-3", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -736,7 +736,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=6,
         early_stop_patience_steps=10,
         val_size=6,
-        max_steps=300
+        max_steps=100
     )
     use_model(g, "tide-6", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -745,7 +745,7 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         h=12,
         early_stop_patience_steps=10,
         val_size=12,
-        max_steps=300
+        max_steps=100
     )
     use_model(g, "tide-12", model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 

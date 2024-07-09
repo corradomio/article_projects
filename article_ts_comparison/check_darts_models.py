@@ -78,25 +78,29 @@ def compare_models(g, Xtr, ytr, Xte, yte):
 
     linear = sktdts.nbeats.NBEATSModel(
         input_chunk_length=24,
-        output_chunk_length=1
+        output_chunk_length=1,
+        n_epochs=100
     )
     use_model(g, "nbeats-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.nbeats.NBEATSModel(
         input_chunk_length=24,
-        output_chunk_length=3
+        output_chunk_length=3,
+        n_epochs=100
     )
     use_model(g, "nbeats-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.nbeats.NBEATSModel(
         input_chunk_length=24,
-        output_chunk_length=6
+        output_chunk_length=6,
+        n_epochs=100
     )
     use_model(g, "nbeats-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.nbeats.NBEATSModel(
         input_chunk_length=24,
-        output_chunk_length=12
+        output_chunk_length=12,
+        n_epochs=100
     )
     use_model(g, "nbeats-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -275,24 +279,28 @@ def compare_models(g, Xtr, ytr, Xte, yte):
     linear = sktdts.tft_model.TFTModel(
         input_chunk_length=24,
         output_chunk_length=1,
+        # n_epochs=100
     )
     use_model(g, "tft-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tft_model.TFTModel(
         input_chunk_length=24,
         output_chunk_length=3,
+        # n_epochs=100
     )
     use_model(g, "tft-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tft_model.TFTModel(
         input_chunk_length=24,
         output_chunk_length=6,
+        # n_epochs=100
     )
     use_model(g, "tft-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tft_model.TFTModel(
         input_chunk_length=24,
         output_chunk_length=12,
+        # n_epochs=50
     )
     use_model(g, "tft-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -300,25 +308,25 @@ def compare_models(g, Xtr, ytr, Xte, yte):
 
     linear = sktdts.tide_model.TiDEModel(
         input_chunk_length=24,
-        output_chunk_length=1,
+        output_chunk_length=1
     )
     use_model(g, "tide-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tide_model.TiDEModel(
         input_chunk_length=24,
-        output_chunk_length=3,
+        output_chunk_length=3
     )
     use_model(g, "tide-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tide_model.TiDEModel(
         input_chunk_length=24,
-        output_chunk_length=6,
+        output_chunk_length=6
     )
     use_model(g, "tide-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tide_model.TiDEModel(
         input_chunk_length=24,
-        output_chunk_length=12,
+        output_chunk_length=12
     )
     use_model(g, "tide-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -326,25 +334,25 @@ def compare_models(g, Xtr, ytr, Xte, yte):
 
     linear = sktdts.transformer_model.TransformerModel(
         input_chunk_length=24,
-        output_chunk_length=1,
+        output_chunk_length=1
     )
     use_model(g, "transformer-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.transformer_model.TransformerModel(
         input_chunk_length=24,
-        output_chunk_length=3,
+        output_chunk_length=3
     )
     use_model(g, "transformer-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.transformer_model.TransformerModel(
         input_chunk_length=24,
-        output_chunk_length=6,
+        output_chunk_length=6
     )
     use_model(g, "transformer-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.transformer_model.TransformerModel(
         input_chunk_length=24,
-        output_chunk_length=12,
+        output_chunk_length=12
     )
     use_model(g, "transformer-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -352,25 +360,25 @@ def compare_models(g, Xtr, ytr, Xte, yte):
 
     linear = sktdts.tsmixer_model.TSMixerModel(
         input_chunk_length=24,
-        output_chunk_length=1,
+        output_chunk_length=1
     )
     use_model(g, "tsmixer-1", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tsmixer_model.TSMixerModel(
         input_chunk_length=24,
-        output_chunk_length=3,
+        output_chunk_length=3
     )
     use_model(g, "tsmixer-3", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tsmixer_model.TSMixerModel(
         input_chunk_length=24,
-        output_chunk_length=6,
+        output_chunk_length=6
     )
     use_model(g, "tsmixer-6", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     linear = sktdts.tsmixer_model.TSMixerModel(
         input_chunk_length=24,
-        output_chunk_length=12,
+        output_chunk_length=12
     )
     use_model(g, "tsmixer-12", linear, Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 

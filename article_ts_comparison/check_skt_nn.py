@@ -20,7 +20,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning)
 
 TARGET = "import_kg"
-USED_LIBRARY = "skt"
+USED_LIBRARY = "sktnn"
 RESULT_FILE = "wape_skt_nn.csv"
 
 
