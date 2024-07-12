@@ -1,9 +1,6 @@
 import logging.config
-import os
-
-import h5py
-
 from collections import defaultdict
+
 from utils import foreach_dataset, ALGORITHMS, SEM_TYPES
 
 #
@@ -59,7 +56,9 @@ class PartialDags:
         cm = info['causal_adjacency_matrix']
         st = info['sem_type']
 
-        if len(cm[cm < 0]) > 0:
+        if len(cm[cm == 255]):
+            self.pdags[(cda, st, n)] += 1
+        elif len(cm[cm < 0]) > 0:
             self.pdags[(cda, st, n)] += 1
         elif len(cm[cm > 0]) > 0:
             self.ndags[(cda, st, n)] += 1
@@ -80,7 +79,7 @@ def main():
     pdags = PartialDags()
 
     foreach_dataset(
-        "./data",
+        "../article_causal_discovery_data",
         callback=lambda path, info: pdags.add(path, info),
         # max_degree=5,
         # skip_algos=['DirectLiNGAM', 'GES', 'GOLEM', 'ICALiNGAM']

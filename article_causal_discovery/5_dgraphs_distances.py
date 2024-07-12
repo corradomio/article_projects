@@ -52,13 +52,11 @@ class HammingDistance:
         self.adj_mat = {}       # adjacency matrix
         self.dsepmat = {}       # using 'd_separation()'
         self.dsep_uv = {}       # using 'd_separation_pair()'
-        self.adjpow0 = {}       # power of (0 + adjacency matrix)
         self.adj_pow = {}       # power of (I + adjacency matrix)
 
         self.adjm_dist = {}     # using adjacency matrix
         self.dsep_dist = {}     # using d_separation matrix
         self.dsuv_dist = {}     # using d_separation_pair matrix
-        self.adjp0dist = {}     # using power of (0 + adjacency matrix)
         self.adjp_dist = {}     # using power of (I + adjacency matrix)
         self.count = 0
 
@@ -179,9 +177,9 @@ class HammingDistance:
                             self.adjp_dist[gid][si, di, ai, aj] = hd
                             self.adjp_dist[gid][si, di, aj, ai] = hd
 
-                            #
+                            # -------------------------------------
                             # end
-                            #
+                            # -------------------------------------
                             count += 1
                             self.log.infot(f"... {self.count}")
         # end gid/si/di/ai/aj
