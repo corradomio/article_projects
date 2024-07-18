@@ -39,7 +39,7 @@ warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning
 
 TARGET = 'import_kg'
 USED_LIBRARY = "nf"
-RESULT_FILE = "wape_nf_models.csv"
+RESULT_FILE = "nf-wape.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -879,11 +879,9 @@ def main():
         yte = yg_te[g]
 
         compare_models(g, Xtr, ytr, Xte, yte)
-
-        break
     pass
 
-    # csvx.save_csv("results_wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
+    # csvx.save_csv("results-wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
     pass
 # end
 

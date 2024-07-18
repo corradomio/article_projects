@@ -18,7 +18,7 @@ warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning
 
 TARGET = "import_kg"
 USED_LIBRARY = "skt"
-RESULT_FILE = "wape_skt_classic.csv"
+RESULT_FILE = "skt-wape.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -44,6 +44,10 @@ def compare_models(g, Xtr, ytr, Xte, yte):
         p=1, q=1
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
+    use_model(g, "garch-3-1", sktime.forecasting.arch.StatsForecastGARCH(
+        p=3, q=1
+    ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
+
     use_model(g, "garch-6-1", sktime.forecasting.arch.StatsForecastGARCH(
         p=6, q=1
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
@@ -59,6 +63,10 @@ def compare_models(g, Xtr, ytr, Xte, yte):
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
     use_model(g, "garch-6-2", sktime.forecasting.arch.StatsForecastGARCH(
+        p=3, q=2
+    ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
+
+    use_model(g, "garch-3-2", sktime.forecasting.arch.StatsForecastGARCH(
         p=6, q=2
     ), Xtr_scaled, ytr_scaled, Xte_scaled, yte_scaled, fh, USED_LIBRARY, RESULT_FILE)
 
@@ -131,7 +139,7 @@ def main():
         pass
     pass
 
-    # csvx.save_csv("results_wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
+    # csvx.save_csv("results-wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
     pass
 # end
 

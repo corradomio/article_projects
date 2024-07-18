@@ -19,7 +19,7 @@ warnings.simplefilter(action='ignore', category=pandas.errors.PerformanceWarning
 
 TARGET = 'import_kg'
 USED_LIBRARY = "skl"
-RESULT_FILE = "wape_skl_linknn.csv"
+RESULT_FILE = "skl-wape.csv"
 
 
 # ---------------------------------------------------------------------------
@@ -163,7 +163,7 @@ def main():
         pass
     pass
 
-    # csvx.save_csv("results_wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
+    # csvx.save_csv("results-wape.csv", RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
     pass
 # end
 
