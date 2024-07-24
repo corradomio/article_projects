@@ -1,8 +1,11 @@
-import h5py
-import stdlib.csvx as csvx
+import os.path
 from datetime import datetime
+
+import h5py
+
+import stdlib.csvx as csvx
+import stdlib.loggingx as logging
 from sklearnx.metrics import weighted_absolute_percentage_error
-from stdlib.tprint import tprint
 
 RESULTS_WAPE = [["lib", "item_area", "model", "wape"]]
 PREDICT_FILE = "predict_models.hdf5"
@@ -11,11 +14,22 @@ PREDICT_FILE = "predict_models.hdf5"
 # ---------------------------------------------------------------------------
 
 def use_model(g, name, model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_true, fh, USED_LIBRARY, RESULT_FILE):
-    start = datetime.now()
+    log = logging.getLogger("use_model")
+
+    # check if the dataser is already processed
     item_area: str = g[0]
+    ianame = item_area.replace('/', '_').replace(' ', '_')
+    PREDICT_FILE = f"{USED_LIBRARY}-predictions.hdf5"
+    df_key = f"{ianame}/{USED_LIBRARY}/{name}"
+    if os.path.exists(PREDICT_FILE):
+        with h5py.File(PREDICT_FILE, mode="r") as df:
+            if df_key in df:
+                log.info(f"... {item_area}/{name} skipped")
+                return
+
+    start = datetime.now()
     try:
-        ianame = item_area.replace('/', '_').replace(' ', '_')
-        tprint(f"... {item_area}/{name}")
+        log.info(f"... {item_area}/{name}")
 
         # train
         model.fit(y=ytr_scaled, X=Xtr_scaled)
@@ -29,7 +43,6 @@ def use_model(g, name, model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_true, fh, 
         RESULTS_WAPE.append([USED_LIBRARY, item_area, name, wape])
         csvx.save_csv(RESULT_FILE, RESULTS_WAPE[1:], header=RESULTS_WAPE[0])
 
-        PREDICT_FILE = f"{USED_LIBRARY}-predictions.hdf5"
         with h5py.File(PREDICT_FILE, mode="a") as df:
 
             if f"{ianame}/true" not in df:
@@ -42,7 +55,7 @@ def use_model(g, name, model, Xtr_scaled, ytr_scaled, Xte_scaled, yte_true, fh, 
             dspred.attrs['time'] = time
         # end
     except Exception as e:
-        tprint(f"ERROR: {item_area}/{name}: {e}")
+        log.error(f"ERROR: {item_area}/{name}: {e}")
         pass
     return
 # end
