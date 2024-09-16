@@ -1,0 +1,77 @@
+Graph distances
+----------------
+
+I dataset 'hamming_distances.hdf5' e' un file HDF5 avente la seguente struttura:
+
+    /   con attributi
+        n_algorithms: int
+            numero di algoritmi usati (6)
+        n_datasets: int
+            numero di dataset usati per ogni algoritmo e per ogni distribuzione (10)
+        n_sem_types: int
+            numero di distribuzioni usate per generare ogni dataset (7)
+
+        algorithm: string[6]
+            lista dei nomi degli algoritmi usati
+            (PC, DirectLiNGAM, ICALiNGAM, GES, GOLEM, Notears)
+        sem_type: string[7]
+            nomi delle distribuzioni usate per generare i dataset
+            (exp, gauss, gumbal, uniform, mim, mlp, quadratic)
+
+    /<order>/<gid>/matrix
+        matrici per il grafo <gid> avente ordine (n di nodi) <order> (n)
+        Le matrici sono:
+
+                                      1   2    3   4   5
+        .../adjacency_matrix:   array[7 x 10 x 7 x n x n]
+            matrici di adiacenza
+
+        .../d_separation:       array[7 x 10 x 7 x n x n]
+            matrici generate usando l'algoritmo 'd_separation'
+
+        .../d_separation_pair:  array[7 x 10 x 7 x n x n]
+            matrici generate usando la funzione 'd_separation' di networkx
+
+        .../power_1:            array[7 x 10 x 7 x n x n]
+            matrice (I+A)^(n-1)
+            
+        .../sid (Structural Intervention Distance)
+            tra grafi inferiti e GT
+
+        dove le dimensioni vanno interpretate come:
+        
+        1) le 7 distribuzioni
+        2) i 10 dataset
+        3) algoritmi: all'indice 0 c'e' la matrice del grafo GT
+           agli indici 1..6, le matrici dei grafi generati dagli 
+           algoritmi sopra indicati (nello stesso ordine, ovviamente)
+      4&5) la matrice vera e propria
+      
+        All'indice [0,_,_] c'e' la matrice di adiacenza del grafo GT
+        (replicata 10 volte)
+
+
+    /<order>/<gid>/dist
+        distanza di hamming tra la matrice relativa al grafo GT e tutti gli altri grafi
+        Il grafo GT e' il primo
+                                          1   2    3   4
+        .../adjacency_matrix:       array[7 x 10 x 7 x 7]
+            distanza tra matrici di adiacenza
+        .../d_separation:           array[7 x 10 x 7 x 7]
+            distanza tra le matrici di d_separation
+        .../d_separation_pair:      array[7 x 10 x 7 x 7]
+            distanza tra le matrici di d_separation_pair
+        .../power_1:                array[7 x 10 x 7 x 7]
+            distanza tra le matrici di power_1
+
+        dove le dimensioni vanno interpretate come:
+        
+        1) le 7 distribuzioni
+        2) i 10 dataset
+      3&4) la matrice delle distanze tra 
+                GT + tutti gli altri algoritmi
+           vs 
+                GT + tutti gli altri algoritmi
+
+           (7 = 1+6 = GT + algoritmi)
+

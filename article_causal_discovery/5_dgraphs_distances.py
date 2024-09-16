@@ -49,11 +49,13 @@ def hamming_distance(am: np.ndarray, cm: np.ndarray) -> float:
 class HammingDistance:
 
     def __init__(self):
+        # matrices
         self.adj_mat = {}       # adjacency matrix
         self.dsepmat = {}       # using 'd_separation()'
         self.dsep_uv = {}       # using 'd_separation_pair()'
         self.adj_pow = {}       # power of (I + adjacency matrix)
 
+        # distances
         self.adjm_dist = {}     # using adjacency matrix
         self.dsep_dist = {}     # using d_separation matrix
         self.dsuv_dist = {}     # using d_separation_pair matrix
@@ -63,15 +65,15 @@ class HammingDistance:
         self.log = logging.getLogger("hdist__")
 
     def add(self, path, info):
-        # compose the adjacency matrices for GT and discovered dags
-        # in a tensor having the structure:
+        # compose the adjacency matrices for GT and discovered DAGs
+        # in a tensor having the shape:
         #
         #   (sem_types, datasets, algorithms+1, n, n)
         #
         # where:
         #   sem_types:   7 data distributions   (exp, gauss, gumel, uniform | mim, mlp, quadratic)
         #   datasets:   10 causal graphs generated from different datasets
-        #   algorithms:  GT, PC, DirectLiNGAM, ICALiNGAM, GES, GOLEM, Notears
+        #   algorithms: GT, PC, DirectLiNGAM, ICALiNGAM, GES, GOLEM, Notears
         #   n, n:       adjacency matrix for GT (index 0) and the other algorithms
         #               (previous index)
         #
@@ -105,6 +107,7 @@ class HammingDistance:
                     self.dsepmat[gid][gsi, gdi, 0] = dsep
                     self.dsep_uv[gid][gsi, gdi, 0] = dsuv
                     self.adj_pow[gid][gsi, gdi, 0] = adj1
+                # end gdi
             # end gsi/gdi
         self.adj_mat[gid][si, di, ai + 1] = cm
         self.dsepmat[gid][si, di, ai + 1] = nxx.d_separation(cm)
@@ -182,6 +185,10 @@ class HammingDistance:
                             # -------------------------------------
                             count += 1
                             self.log.infot(f"... {self.count}")
+                        # end aj
+                    # end ai
+                # end di
+            # end si
         # end gid/si/di/ai/aj
         self.log.info(f"Done {self.count}))", force=True)
         return
@@ -190,6 +197,7 @@ class HammingDistance:
     def save(self, hdpath):
         if os.path.exists(hdpath):
             os.remove(hdpath)
+
         dest = h5py.File(hdpath, 'w')
         dest.attrs['sem_type'] = list(SEM_TYPES.keys())
         dest.attrs['algorithm'] = list(ALGORITHMS.keys())
