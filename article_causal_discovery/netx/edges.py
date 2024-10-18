@@ -1,7 +1,9 @@
 from collections import defaultdict, deque
-from typing import Optional
+from typing import Optional, Tuple, List, Dict
 
-edge = tuple[int, int]
+# support for Python 3.8: Tuple Dict, List
+
+edge = Tuple[int, int]
 
 
 class IEdges(dict):
@@ -16,7 +18,7 @@ class IEdges(dict):
         self.multi = multi
 
     @property
-    def adj(self) -> dict[int, list[int]]:
+    def adj(self) -> Dict[int, List[int]]:
         """
         Adjacency list:
             u -> [v1, v2, ...]
@@ -24,21 +26,21 @@ class IEdges(dict):
         return {}
 
     @property
-    def succ(self) -> dict[int, list[int]]:
+    def succ(self) -> Dict[int, List[int]]:
         """
         Successors of a node
         """
         return {}
 
     @property
-    def pred(self) -> dict[int, list[int]]:
+    def pred(self) -> Dict[int, List[int]]:
         """
         Predecessors of a node
         :return:
         """
         return {}
 
-    def neighbors(self, n: int, inbound: Optional[bool]) -> list[int]:
+    def neighbors(self, n: int, inbound: Optional[bool]) -> List[int]:
         """
         Neighbors of a node
         :param n: node
@@ -99,8 +101,8 @@ class IEdges(dict):
                 deg += len(self[(u, v)])
             return deg
 
-    # def __getitem__(self, uv: tuple[int, int]) -> list[int]: return []
-    # def __setitem__(self, uv: tuple[int, int], value: list[int]): ...
+    # def __getitem__(self, uv: tuple[int, int]) -> List[int]: return []
+    # def __setitem__(self, uv: tuple[int, int], value: List[int]): ...
     # def __len__(self): return 0
 
 
@@ -109,18 +111,18 @@ class UEdges(IEdges):
 
     def __init__(self, loops: bool, multi: bool):
         super().__init__(loops, multi)
-        self._adj: dict[int, list[int]] = defaultdict(lambda: list())
+        self._adj: Dict[int, List[int]] = defaultdict(lambda: list())
 
     @property
-    def adj(self) -> dict[int, list[int]]:
+    def adj(self) -> Dict[int, List[int]]:
         return self._adj
 
     @property
-    def succ(self) -> dict[int, list[int]]:
+    def succ(self) -> Dict[int, List[int]]:
         return self._adj
 
     @property
-    def pred(self) -> dict[int, list[int]]:
+    def pred(self) -> Dict[int, List[int]]:
         return self._adj
 
     def add_edge(self, u, v, eprops):
@@ -128,7 +130,7 @@ class UEdges(IEdges):
             u, v = v, u
         super().add_edge(u, v, eprops)
 
-    def neighbors(self, n: int, inbound: Optional[bool]) -> list[int]:
+    def neighbors(self, n: int, inbound: Optional[bool]) -> List[int]:
         return self._adj[n]
 
     def __contains__(self, uv):
@@ -167,25 +169,25 @@ class DEdges(IEdges):
     def __init__(self, loops: bool, multi: bool):
         super().__init__(loops, multi)
 
-        self._succ: dict[int, list[int]] = defaultdict(lambda: list())
-        self._prec: dict[int, list[int]] = defaultdict(lambda: list())
+        self._succ: Dict[int, List[int]] = defaultdict(lambda: list())
+        self._prec: Dict[int, List[int]] = defaultdict(lambda: list())
 
     @property
-    def adj(self) -> dict[int, list[int]]:
+    def adj(self) -> Dict[int, List[int]]:
         return self._succ
 
     @property
-    def succ(self) -> dict[int, list[int]]:
+    def succ(self) -> Dict[int, List[int]]:
         return self._succ
 
     @property
-    def pred(self) -> dict[int, list[int]]:
+    def pred(self) -> Dict[int, List[int]]:
         return self._prec
 
     def add_edge(self, u, v, eprops):
         super().add_edge(u, v, eprops)
 
-    def neighbors(self, n: int, inbound: Optional[bool]) -> list[int]:
+    def neighbors(self, n: int, inbound: Optional[bool]) -> List[int]:
         if inbound is None:
             return self._prec[n] + self._succ[n]
         elif inbound:

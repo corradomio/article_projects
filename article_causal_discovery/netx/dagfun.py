@@ -1,3 +1,9 @@
+# WARNING:
+#
+#   based on netx.Graph
+#   NOT   on networkx.Graph
+#
+
 from collections import deque
 from typing import Iterator
 
@@ -37,34 +43,38 @@ def children(G: Graph, n: int) -> set[int]:
     return set(G.succ[n])
 
 
-def ancestors(G: Graph, v: int) -> set[int]:
-    if v not in G.cache["ancestors"]:
+def ancestors(G: Graph, v: int, include=False) -> set[int]:
+    cname = "ancestors_incl" if include else "ancestors"
+    if v not in G.cache[cname]:
         waiting = deque()
         ancestors: set[int] = set()
+        if include: ancestors.add(v)
         waiting.extend(parents(G, v))
         while waiting:
             u = waiting.popleft()
             if u not in ancestors:
                 ancestors.add(u)
                 waiting.extend(G.pred[u])
-        G.cache["ancestors"][v] = ancestors
+        G.cache[cname][v] = ancestors
     # end
-    return G.cache["ancestors"][v]
+    return G.cache[cname][v]
 
 
-def descendants(G: Graph, u) -> set[int]:
-    if u not in G.cache["descendants"]:
+def descendants(G: Graph, u, include=False) -> set[int]:
+    cname = "descendants_incl" if include else "descendants"
+    if u not in G.cache[cname]:
         waiting = deque()
         descendants: set[int] = set()
+        if include: descendants.add(u)
         waiting.extend(children(G, u))
         while waiting:
             v = waiting.popleft()
             if v not in descendants:
                 descendants.add(v)
                 waiting.extend(G.succ[v])
-        G.cache["descendants"][u] = descendants
+        G.cache[cname][u] = descendants
     # end
-    return G.cache["descendants"][u]
+    return G.cache[cname][u]
 
 
 # ---------------------------------------------------------------------------

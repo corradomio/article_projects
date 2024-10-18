@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, List
 
 
 # ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@ def list_map(f, l):
 # lrange
 # ---------------------------------------------------------------------------
 
-def lrange(start, stop=None, step=1) -> list[int]:
+def lrange(start, stop=None, step=1) -> List[int]:
     """As 'range' but it returns a list"""
     if stop is None:
         return list(range(start))
@@ -29,7 +29,7 @@ def lrange(start, stop=None, step=1) -> list[int]:
 # argsort
 # ---------------------------------------------------------------------------
 
-def argsort(values: Iterable, descending: bool = False) -> list[int]:
+def argsort(values: Iterable, descending: bool = False) -> List[int]:
     """Sort the values in ascending (ore descending) order and return the indices"""
     n = len(list(values))
     pairs = [(i, values[i]) for i in range(n)]

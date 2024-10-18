@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Union, Iterator, Any
+from typing import Union, Iterator, Any, List, Dict, Tuple
 
 __version__ = "1.1.0"
 
@@ -71,7 +71,7 @@ class Graph:
         self._acyclic = acyclic
         self._props = gprops
 
-        self._nodes: dict[int, dict] = {}
+        self._nodes: Dict[int, Dict] = {}
 
         if acyclic:
             self._edges: IEdges = DagEdges(multi)
@@ -85,7 +85,7 @@ class Graph:
 
         # local cache used to save results of some complex computation
         # Cleared on EACH change
-        self.cache: dict[str, Any] = defaultdict(lambda : {})
+        self.cache: Dict[str, Any] = defaultdict(lambda : {})
     # end
 
     # -----------------------------------------------------------------------
@@ -123,7 +123,7 @@ class Graph:
     # property G.nodes is NOT compatible with 'networkx'
 
     @property
-    def nodes_(self) -> dict[int, dict]:
+    def nodes_(self) -> Dict[int, Dict]:
         return self._nodes
 
     # -----------------------------------------------------------------------
@@ -137,15 +137,15 @@ class Graph:
     # For undirected graphs, succ and pred are the same
 
     @property
-    def adj(self) -> dict[int, list[int]]:
+    def adj(self) -> Dict[int, List[int]]:
         return self._edges.adj
 
     @property
-    def succ(self) -> dict[int, list[int]]:
+    def succ(self) -> Dict[int, List[int]]:
         return self._edges.succ
 
     @property
-    def pred(self) -> dict[int, list[int]]:
+    def pred(self) -> Dict[int, List[int]]:
         return self._edges.pred
 
     # -----------------------------------------------------------------------
@@ -177,9 +177,9 @@ class Graph:
         return n in self._nodes
 
     def add_node(self, n: int, **nprops):
-        return self.add_node_(n, nprops)
+        return self._add_node(n, nprops)
 
-    def add_node_(self, n: int, nprops: dict):
+    def _add_node(self, n: int, nprops: dict):
         if n not in self._nodes:
             self._nodes[n] = nprops
             self.adj[n] = []
@@ -188,16 +188,16 @@ class Graph:
         self.cache.clear()
         return self
 
-    def add_nodes_from(self, nlist: list[int], **nprops):
+    def add_nodes_from(self, nlist: List[int], **nprops):
         for n in nlist:
             if isinstance(n, tuple):
                 v, vprops = n
-                self.add_node_(v, nprops | vprops)
+                self._add_node(v, nprops | vprops)
             else:
-                self.add_node_(n, nprops)
+                self._add_node(n, nprops)
         return self
 
-    def neighbors(self, n: int, inbound=None) -> list[int]:
+    def neighbors(self, n: int, inbound=None) -> List[int]:
         """
         :param n:
         :param inbound:
@@ -227,10 +227,10 @@ class Graph:
         return (u, v) in self._edges
 
     def add_edge(self, u: int, v: int, **eprops):
-        return self.add_edge_(u, v, eprops)
+        return self._add_edge(u, v, eprops)
 
     # edge props as dict
-    def add_edge_(self, u: int, v: int, eprops: dict):
+    def _add_edge(self, u: int, v: int, eprops: dict):
         self.add_node(u)
         self.add_node(v)
         self._edges.add_edge(u, v, eprops)
@@ -239,15 +239,15 @@ class Graph:
 
     # compatibility
     def add_edges_from(self,
-                       elist: list[Union[tuple[int, int], tuple[int, int, dict]]],
+                       elist: List[Union[Tuple[int, int], Tuple[int, int, dict]]],
                        **eprops):
         for e in elist:
             if len(e) == 2:
                 u, v = e
-                self.add_edge_(u, v, eprops)
+                self._add_edge(u, v, eprops)
             else:
                 u, v, uvprops = e
-                self.add_edge_(u, v, eprops | uvprops)
+                self._add_edge(u, v, eprops | uvprops)
         return self
 
     # -----------------------------------------------------------------------
@@ -279,7 +279,7 @@ class Graph:
     # -----------------------------------------------------------------------
     # Nodes or edges ???
 
-    def __getitem__(self, n_e: Union[int, tuple[int, int]]) -> list[int]:
+    def __getitem__(self, n_e: Union[int, Tuple[int, int]]) -> List[int]:
         """
         :param n_e: node or edge
         :return:
@@ -298,11 +298,11 @@ class Graph:
         )
 
         for n in self._nodes:
-            G.add_node_(n, self._nodes[n])
+            G._add_node(n, self._nodes[n])
 
         for uv in self._edges:
             u, v = uv
-            G.add_edge_(u, v, self._edges[uv])
+            G._add_edge(u, v, self._edges[uv])
 
         return G
 
