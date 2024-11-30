@@ -15,14 +15,22 @@ TARGET = 'import_kg'
 #
 
 def plot_ts(df, group: tuple):
-    tprint(group)
-    gname = group[0].replace('/', '_').replace(' ', '_')
-    y = df[TARGET]
-    sktimex.utils.plot_series(y, labels=['data'], title=group[0])
+    # group: <item>~<country>
+    # reverse the order
+    item_area = group[0]
+    parts = item_area.split("~")
+    area_item =f"{parts[1]}~{parts[0]}"
 
-    fname = f"plots/{gname}.png"
+    tprint(item_area)
+    gname = area_item.replace('/', '_').replace(' ', '_')
+    y = df[TARGET]
+    sktimex.utils.plot_series(y, labels=['data'], title=item_area)
+
+    fname = f"../article_ts_comparison_data/plots.352/{gname}.png"
     sktimex.utils.savefig(fname, dpi=300)
     sktimex.utils.close()
+    return
+# end
 
 
 # ---------------------------------------------------------------------------
@@ -71,7 +79,6 @@ def main():
     # )
 
     pdx.groups_apply(df, plot_ts)
-
     pass
 
 
