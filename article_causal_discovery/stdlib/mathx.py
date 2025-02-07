@@ -1,3 +1,6 @@
+#
+# Real mathematics
+#
 from math import *
 from typing import Union, Iterable
 

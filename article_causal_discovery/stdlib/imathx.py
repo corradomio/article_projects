@@ -1,3 +1,6 @@
+#
+# Integer mathematics
+#
 from typing import Union, Iterable
 from math import factorial
 

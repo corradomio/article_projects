@@ -25,10 +25,10 @@ def main():
     os.makedirs('data', exist_ok=True)
     os.makedirs('graphs', exist_ok=True)
 
-    all_range = range(6, 6)
-    n_range = range(6, 10)          # n of vertices/nodes
-    d_range = [0.10, 0.15, 0.20]    # graph density
-    Ng = 1000                       # n of graphs for each pair n/m
+    all_range = range(0,0)              # ALL
+    n_range = range(7,16)               # sampled
+    d_range = [.10, .15, .20, .25, .30] # graph density
+    Ng = 10000                       # n of graphs for each pair n/m
     rnd.seed(42)
 
     now = datetime.now()
@@ -57,7 +57,10 @@ def main():
     #
     for n in all_range:
         log.debug(f"... {n} nodes")
+
+        graphs = {}
         graphs_n = []
+
         for G in netx.dag_enum(n):
             m = len(G.edges)
 
@@ -76,6 +79,10 @@ def main():
         # end
         graphs[str(n)] = graphs_n
         log.info(f"... {n} nodes: {len(graphs_n)} graphs")
+
+        log.info(f'saving ...')
+        jdata['graphs'] = graphs
+        jsx.save(jdata, f"data/graphs-enum-{n}.json")
     # end
 
     #
@@ -88,10 +95,14 @@ def main():
     # G: n of graphs
     # M: n of edges
     for n in n_range:
-        log.debug(f"... {n} nodes")
+        # log.debug(f"... {n} nodes")
+
+        graphs = {}
         graphs_n = []
 
         for d in d_range:
+            log.debug(f"... {n} nodes, {d} density")
+
             # select the sizes
             m = iround(d*n*n)
 
@@ -113,9 +124,11 @@ def main():
 
                 wl_hashes.add(wl_hash)
 
+                size = G.number_of_edges()
+
                 graphs_d.append({
                     "n": n,
-                    "m": m,
+                    "m": size,
                     "wl_hash": wl_hash,
                     "adjacency_matrix": adjacency_matrix
                 })
@@ -124,15 +137,26 @@ def main():
                 log.debugt(f'... {count:5}')
             pass
             graphs_n.extend(graphs_d)
+
+            # graphs_n = graphs_d
+            #
+            # graphs[str(n)] = graphs_n
+            # jdata['graphs'] = graphs
+            # jsx.save(jdata, f"data/graphs-enum-{n}-{int(d*100)}.json")
         pass
+
         graphs[str(n)] = graphs_n
         log.info(f"... {n} nodes: {len(graphs_n)} graphs")
-    # end
-    jdata['graphs'] = graphs
 
-    log.info(f'saving ...')
+        graphs[str(n)] = graphs_n
+        jdata['graphs'] = graphs
+        jsx.save(jdata, f"data/graphs-enum-{n}-sampled.json")
+    # end
+    # jdata['graphs'] = graphs
+    # log.info(f'saving ...')
     # jsx.save(jdata, f"graphs-{now.strftime('%Y%m%d-%H%M%S')}.json")
-    jsx.save(jdata, f"data/graphs-enum-6-9.json")
+    # jsx.save(jdata, f"data/graphs-enum-6-9.json")
+
     log.info('done')
     return
 

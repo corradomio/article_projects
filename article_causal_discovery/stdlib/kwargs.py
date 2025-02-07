@@ -8,11 +8,11 @@
 #     usato in skorch, ad esempio.
 #
 #
-from typing import Union, Any, Dict, List
+from typing import Union, Any
 from .convert import tobool, CollectionType, as_list
 
 
-def kwval(kwargs: Dict[Union[str, tuple], Any],
+def kwval(kwargs: dict[Union[str, tuple], Any],
           key: Union[None, str, tuple, list] = None,
           defval: Any = None) -> Any:
     """
@@ -114,7 +114,7 @@ def kwselect(kwargs: dict, prefix: str) -> dict:
     return s
 
 
-def kwexclude(kwargs: dict, exclude: Union[str, List[str]]) -> dict:
+def kwexclude(kwargs: dict, exclude: Union[str, list[str]]) -> dict:
     """
     Create a new dictionary without keys having as prefix a string in 'exclude'
 

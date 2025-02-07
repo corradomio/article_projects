@@ -1,0 +1,67 @@
+hidden cofounders
+
+trovare i cofounders
+
+algoritmi che trovano gli hidden cofounders
+
+IIDSimulation piu' fine 
+    scegliere i dati per ogni nodo
+    scegliere la funzione su ogni arco
+vicino con editing:
+    editign distance tra grafi
+        una sola mossa per migliorare l'oracolo
+        GNN che predice l'arco da aggiungere
+
+tutti gli algoritmi su 5 nodi
+
+funzioni
+    +
+    log
+    exp
+    sin
+    sqrt
+    power
+
+SAC
+
+
+1 dataset
+    10000 record
+
+
+campionamento 
+    10000
+
+
+2 nodes: 1 graphs
+3 nodes: 4 graphs (*4)
+4 nodes: 38 graphs (*10)
+5 nodes: 728 graphs (*20)
+6 nodes: 26_704 graphs (*40)
+7 nodes: 1_866_256 graphs (*80)
+.
+Non ci provo nemmeno a generare tutti i DAG di ordine 8,9,10.
+Spannometricamente:  
+8 nodi: 7 nodi * 160 = 320_000_000
+9 nodi: 8 nodi * 320 = 102_400_000_000
+10 nodi: 9 nodi * 640 = 65_536_000_000_000
+!!!
+
+
+    Berigu
+    Havi Gotrock
+
+
+Matteo Paris: fisico x quantum computing
+
+Quantum
+
+Ernesto la prox settimana
+
+-------------------------------------------
+
+generazione dati
+
+hidden cofounder
+
+algoritmi in grado di trovarli

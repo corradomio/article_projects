@@ -1,0 +1,32 @@
+POSSIBILI SVILUPPI
+
+basati su generazione dati
+
+    qui tutte le variabili erano visibili: non c'erano variabili nascoste, quindi nessun hidden confounder: si può studiare il caso di presenza di variabili nascoste.
+    usare altre composizioni del comitato di causal discovery algorithms
+
+basati su riestrazione da dati esistenti (DB hydra)
+
+    provare a combinare le differenze tra matrici esempio A-D
+    utilizzare l'intera matrice invece che la somma delle colonne (o righe)
+
+basati su ricalcolo
+
+    calcolare il medoide/baricentro per vedere se aiuta
+
+parte ML
+
+    predire altre distanze, che non siano la D
+    lavorare sull'ordine della Binary Classifier Chain
+    siccome i singoli classificatori della Chain producono sia etichette che probabilità si possono considerare classificatori che ricevono in input (sia etichette che) probabilità
+    per la scelta dell'etichetta finale: invece di scegliere quella con massima probabilità, considerare esplicitamente le topologie coincidenti e farle votare insieme (occhio che non sono indipendenti)
+    in alternativa per la scelta dell'etichetta finale addestrare un classificatore
+    effettuare sensitivity analysis rispetto ai vari parametri di design
+
+estensione a editing
+
+    esplorare possibili fusioni dei DAG per andare oltre oracolo tramite un approccio supervisionato*
+    task:
+    classificazione della situazione: quando il DAG selezionato è già da ritenersi buono e non si deve procedere a cercare miglioramenti?
+    in caso si ritenga che il DAG sia migliorabile, in cosa differisce dalla GT, e quale singola "mossa" lo avvicina alla GT? (una mossa di edit)
+    com'è legata questa mossa alle configurazioni dei DAG prodotti dall'ensemble?

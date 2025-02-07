@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from typing import Iterable
 
 
 # ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@ def list_map(f, l):
 # lrange
 # ---------------------------------------------------------------------------
 
-def lrange(start, stop=None, step=1) -> List[int]:
+def lrange(start, stop=None, step=1) -> list[int]:
     """As 'range' but it returns a list"""
     if stop is None:
         return list(range(start))
@@ -29,7 +29,7 @@ def lrange(start, stop=None, step=1) -> List[int]:
 # argsort
 # ---------------------------------------------------------------------------
 
-def argsort(values: Iterable, descending: bool = False) -> List[int]:
+def argsort(values: Iterable, descending: bool = False) -> list[int]:
     """Sort the values in ascending (ore descending) order and return the indices"""
     n = len(list(values))
     pairs = [(i, values[i]) for i in range(n)]
@@ -73,3 +73,28 @@ def prod_(x):
 
 # compatibility
 mul_ = prod_
+
+
+# ---------------------------------------------------------------------------
+# dict get
+# ---------------------------------------------------------------------------
+# sum_  as Python 'sum([...])'
+# mul_  as Python 'sum([...]) but for multiplication
+#
+def dict_get(d:dict, keys: list, defval):
+    pkeys = keys[:-1]
+    curr: dict = d
+    for k in pkeys:
+        if k not in curr:
+            return defval
+        if not isinstance(curr, dict):
+            return defval
+        curr = curr[k]
+    k = keys[-1]
+    if k not in curr:
+        return defval
+    if not isinstance(curr, dict):
+        return defval
+    else:
+        return curr[k]
+# end

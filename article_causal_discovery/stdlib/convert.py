@@ -1,4 +1,4 @@
-from typing import Iterable, Union, Any, List
+from typing import Iterable, Union, Any
 from .types import *
 
 
@@ -96,7 +96,7 @@ tobool = to_bool
 # to_float
 # ---------------------------------------------------------------------------
 
-def to_float(x) -> Union[float, List[float]]:
+def to_float(x) -> Union[float, list[float]]:
     """
     Convert, recursively, each object in a float:
     1) int -> float

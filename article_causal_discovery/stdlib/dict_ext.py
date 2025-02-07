@@ -1,5 +1,9 @@
+# Deprecated
+#
+# All functions can be replaced from 'stdlib.dict' or from
+# builtin 'dict'
+#
 from typing import Union, Optional
-
 from deprecated import deprecated
 
 from .convert import as_list, CollectionType
@@ -79,6 +83,7 @@ def dict_exclude(d1: dict, keys: Union[None, str, list[str]]) -> dict:
     return d
 
 
+@deprecated(reason="Not a good idea")
 def dict_rename(d: dict, k1: Union[str, list[str], dict[str, str]], k2: Optional[str]=None) -> dict:
     """
     Rename the key 'k1' in the dictionary as 'k2
