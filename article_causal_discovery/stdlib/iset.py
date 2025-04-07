@@ -5,6 +5,7 @@
 # https://graphics.stanford.edu/~seander/bithacks.html
 #
 from typing import *
+from types import FunctionType
 from itertools import combinations
 
 
@@ -31,25 +32,6 @@ _BIT_COUNTS = \
      4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8]
 
 
-def _comb(n: int, k: int) -> int:
-    """Combinations/binomial coefficient"""
-    if k < 0 or n < k:
-        return 0
-    if k == 0 or n == k:
-        return 1
-    c = 1.
-    while k >= 1:
-        c *= n
-        c /= k
-        n -= 1
-        k -= 1
-    c = int(round(c, 0))
-    return c
-
-
-comb = _comb
-
-
 def _iset(l: Iterable[int]) -> int:
     """list -> iset"""
     return sum(1 << i for i in l)
@@ -67,6 +49,25 @@ def _isetm(m: int, l: Collection) -> int:
         if m & (1 << i):
             s += 1 << l[i]
     return s
+
+
+def _comb(n: int, k: int) -> int:
+    """Combinations/binomial coefficient"""
+    if k < 0 or n < k:
+        return 0
+    if k == 0 or n == k:
+        return 1
+    c = 1.
+    while k >= 1:
+        c *= n
+        c /= k
+        n -= 1
+        k -= 1
+    c = int(round(c, 0))
+    return c
+
+
+comb = _comb
 
 
 # ---------------------------------------------------------------------------
@@ -120,33 +121,6 @@ def ilowbit(S: int) -> int:
         b += 1
         S >>= 1
     return b
-
-
-# ---------------------------------------------------------------------------
-
-def parse_k(k: Union[None, int, list[int], tuple], n: int, b: int = 0) -> tuple[int, int]:
-    """
-    Parse k
-        None        -> [0, n]
-        int         -> [k, k]
-        [int]       -> [0, k]
-        [int,int]   - [kmin, kmax]
-
-    :param k: what to parse
-    :param n: set's cardinality
-    :param b: initial value of the range
-    """
-    if k is None:
-        kmin, kmax = 0, n
-    elif isinstance(k, int):
-        kmin, kmax = k, k
-    elif len(k) == 1:
-        kmin, kmax = 0, k[0]
-    else:
-        kmin, kmax = k
-    if kmax < 0:
-        kmax = n + kmax
-    return max(b, kmin), kmax
 
 
 # ---------------------------------------------------------------------------
@@ -315,7 +289,7 @@ def ilexsubset(B: Optional[int] = None,
     if B is None and E is None and n is None:
         raise ValueError("Missing B, E, n")
     if B is None and E is None:
-        B, E = 0, (1 << n)-1
+        B, E = 0, (1 << n) - 1
     if E is None:
         B, E = 0, B
     if n is None:
@@ -332,6 +306,33 @@ def ilexsubset(B: Optional[int] = None,
 
 
 isubsets_lex = ilexsubset
+
+
+# ---------------------------------------------------------------------------
+
+def parse_k(k: Union[None, int, list[int], tuple], n: int, b: int = 0) -> tuple[int, int]:
+    """
+    Parse k
+        None        -> [0, n]
+        int         -> [k, k]
+        [int]       -> [0, k]
+        [int,int]   - [kmin, kmax]
+
+    :param k: what to parse
+    :param n: set's cardinality
+    :param b: initial value of the range
+    """
+    if k is None:
+        kmin, kmax = 0, n
+    elif isinstance(k, int):
+        kmin, kmax = k, k
+    elif len(k) == 1:
+        kmin, kmax = 0, k[0]
+    else:
+        kmin, kmax = k
+    if kmax < 0:
+        kmax = n + kmax
+    return max(b, kmin), kmax
 
 
 # ---------------------------------------------------------------------------
@@ -605,7 +606,6 @@ def ipowerset(N: int, empty: bool = True, full: bool = True) -> Iterator[int]:
     s = 0 if empty else 1
     e = N if full else (N - 1)
     return range(s, e + 1)
-# end
 
 
 def ipowersetn(n: int, empty: bool = True, full: bool = True) -> Iterator[int]:
@@ -1028,6 +1028,25 @@ def imapset(M : Union[List[List[int]], Dict[int, List[int]]]) -> List[int]:
     # end
     return S
 
+
+# ---------------------------------------------------------------------------
+# Boolean functions
+# ---------------------------------------------------------------------------
+# There are 2^2^n binary functions with n parameters
+# More in general:  k^k^n k-functions with n parameters
+#
+
+def iboolfun(k: int, n: int) -> FunctionType:
+    N = (1 << n) - 1
+    return lambda i : imember(k, i & N)
+
+
+def ibooltable(k: int, n: int) -> list[int]:
+    N = (1 << n) - 1
+    T = [0]*(N + 1)
+    for S in isubsets(N):
+        T[S] = imember(k, S & N)
+    return T
 
 # ---------------------------------------------------------------------------
 # End

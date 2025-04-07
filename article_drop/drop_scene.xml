@@ -1,0 +1,133 @@
+<scene version="3.0.0">
+    <integrator type="path">
+        <integer name="max_depth" value="32"/>
+    </integrator>
+
+    <sensor type="thinlens">
+        <float name="fov" value="45"/>
+        <float name="focus_distance" value="40"/>
+        <float name="aperture_radius" value="2"/>
+
+        <transform name="to_world">
+            <lookat origin="0, 40, 5" target="0, 0, 5" up="0, 0, 1"/>
+        </transform>
+
+        <sampler type="independent">
+            <integer name="sample_count" value="128"/>
+        </sampler>
+
+        <film type="hdrfilm">
+            <integer name="width" value="512"/>
+            <integer name="height" value="512"/>
+        </film>
+    </sensor>
+
+    <!-- Light -->
+
+    <!--<   emitter type="directional">
+        <vector name="direction" value="1, 1, 1"/>
+        <rgb name="irradiance" value="1"/>
+    </emitter>-->
+
+    <!--<shape type="rectangle" id="laser_back">
+        <emitter type="directionalarea">
+            <rgb name="radiance" value="1"/>
+        </emitter>
+
+        <transform name="to_world">
+            <scale x="15" y="15" z="1"/>
+            <rotate x="1" angle="90"/>
+            <translate x="0" y="-19" z="5"/>
+        </transform>
+    </shape>-->
+
+    <!--<shape type="rectangle" id="light_back">
+        <emitter type="area">
+            <rgb name="radiance" value="1"/>
+        </emitter>
+
+        <transform name="to_world">
+            <scale x="25" y="25" z="1"/>
+            <rotate x="1" angle="-90"/>
+            <translate x="0" y="-20" z="5"/>
+        </transform>
+
+    </shape>-->
+
+    <!--<shape type="rectangle" id="light_front">
+        <emitter type="area">
+            <rgb name="radiance" value="1"/>
+        </emitter>
+
+        <transform name="to_world">
+            <scale x="20" y="20" z="1"/>
+            <rotate x="1" angle="90"/>
+            <translate x="0" y="60" z="5"/>
+        </transform>
+
+    </shape>-->
+
+    <!-- -->
+
+    <shape type="sphere" id="drop">
+        <!--<bsdf type="dielectric">
+            <rgb name="reflectance" value="0.1, 0.1, 0.1"/>
+        </bsdf>-->
+        <!--<bsdf type="roughconductor">
+            <string name="material" value="Al"/>
+            <string name="distribution" value="ggx"/>
+            <float name="alpha_u" value="0.05"/>
+            <float name="alpha_v" value="0.3"/>
+        </bsdf>-->
+        <!--<bsdf type="dielectric">
+            <string name="int_ior" value="water"/>
+            <string name="ext_ior" value="air"/>
+        </bsdf>-->
+        <bsdf type="conductor">
+            <string name="material" value="Au"/>
+        </bsdf>
+        <float name="radius" value="10"/>
+    </shape>
+
+    <!--<shape type="cube" id="table">
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value=".1, .1, .1"/>
+        </bsdf>
+        <transform name="to_world">
+            <scale x="20" y="40" z="20"/>
+            <translate x="0" y="0" z="-20"/>
+        </transform>
+    </shape>-->
+
+    <!-- -->
+
+    <!--
+    <shape type="cube">
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="1, 0, 0"/>
+        </bsdf>
+        <transform name="to_world">
+            <scale x="10" y=".1" z=".1"/>
+            <translate x="5" y="0" z="0"/>
+        </transform>
+    </shape>
+    <shape type="cube">
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="0, 1, 0"/>
+        </bsdf>
+        <transform name="to_world">
+            <scale x=".1" y="10" z=".1"/>
+            <translate x="0" y="5" z="0"/>
+        </transform>
+    </shape>
+    <shape type="cube">
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="0, 0, 1"/>
+        </bsdf>
+        <transform name="to_world">
+            <scale x=".1" y=".1" z="10"/>
+            <translate x="0" y="0" z="5"/>
+        </transform>
+    </shape>
+    -->
+</scene>

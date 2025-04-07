@@ -1,0 +1,46 @@
+
+
+class ShowShadow:
+    def __init__(self,
+                 shadow_length: float | tuple[float, float] | tuple[float, float, float],
+                 shadow_noise: float,
+                 x_bounds: tuple[float, float],
+                 margins: tuple[float, float, float, float]
+                 ):
+        if isinstance(shadow_length, (int, float)):
+            shadow_length = (0, 0, shadow_length)
+        elif len(shadow_length) == 2:
+            shadow_length = (shadow_length[0], 0, shadow_length[1])
+
+        self.shadow_length: tuple[float, float, float] = shadow_length
+        self.shadow_noise: float = shadow_noise
+        self.x_bounds = x_bounds
+        self.margins = margins
+
+    def fill(self, ax: Axes):
+        lb, rb = self.x_bounds
+        lm, rm, bm, tm = self.margins
+        shadow_bottom, shadow_band, shadow_top = self.shadow_length
+
+        if shadow_top != shadow_bottom and (shadow_band == 0 or shadow_bottom == 0):
+            img_shadow = _gradient_image(100, 100, noise=self.shadow_noise)
+            plt.imshow(img_shadow, cmap='gray', extent=(lb-lm, rb+rm, shadow_bottom, shadow_top))
+        elif shadow_top != shadow_bottom:
+            shadow_step = (1 - shadow_band)/2
+            img_top_shadow = _gradient_image(100, 100, noise=self.shadow_noise) * shadow_step + (shadow_step + shadow_band)
+            img_btm_shadow = _gradient_image(100, 100, noise=self.shadow_noise) * shadow_step
+
+            # used to disable the autoscale
+            # img_top_shadow[99,99] = 1.
+            # img_btm_shadow[99,99] = 1.
+
+            plt.imshow(img_top_shadow, cmap='gray', norm=Normalize(0, 1), extent=(lb-lm, rb+rm, 0, shadow_top))
+            plt.imshow(img_btm_shadow, cmap='gray', norm=Normalize(0, 1), extent=(lb-lm, rb+rm, shadow_bottom, 0))
+
+        img_allblack = _gradient_image(100, 100, direction=None)
+        ax.imshow(img_allblack, cmap='gray', extent=(lb-lm, rb+rm, -bm, shadow_bottom))
+
+        # if shadow_top != shadow_bottom:
+        #     ax.imshow(img_allblack, cmap='gray', extent=(lb, rb, shadow_bottom, 0))
+    # end
+# end
