@@ -1,0 +1,97 @@
+#
+# Python 3.10
+#
+
+path
+h5py
+
+numpy
+scipy
+pandas
+
+matplotlib
+seaborn
+
+networkx
+# igraph
+
+# incompatibility: numpy<2      (it requires > 2)
+# incompatibility: python 3.1   (it requires >= 3.11)
+#iplotx
+#ilayoutx
+
+scikit-learn
+
+statsmodels
+
+semopy
+autograd
+
+#
+# Torch
+#
+# pip install torch=={version}+cu{cuda_version_short} torchvision=={version}+cu{cuda_version_short} torchaudio=={version} --extra-index-url https://download.pytorch.org/whl/cu{cuda_version_short}
+#
+# pip install torch==1.13.0+cpu   --index-url https://download.pytorch.org/whl/cpu
+# pip install torch==1.13.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
+# pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
+#
+# conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia
+# conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 cpuonly -c pytorch
+#
+# skorch
+
+--extra-index-url https://download.pytorch.org/whl/cu117
+torch==1.13.1+cu117
+
+# pip install pytorch-lightning==1.9.0
+# pytorch-lightning==1.9.0
+
+#
+# Causal Inference
+#
+
+# replaced by a modified version to resolve some implementation problems
+# gcastle
+
+# https://causal-learn.readthedocs.io/en/latest/
+# not a very good library
+# there are several implementation errors
+causal-learn
+
+# https://github.com/cdt15/lingam
+# https://lingam.readthedocs.io/en/latest/tutorial/index.html
+lingam
+
+# https://causalpy.readthedocs.io/en/stable/api/generated/causalpy.pymc_models.html#module-causalpy.pymc_models
+# strange library
+causalpy
+
+# https://pygam.readthedocs.io/en/stable/notebooks/tour_of_pygam.html
+# https://pygam.readthedocs.io/en/latest/?badge=latest
+# https://codeburst.io/pygam-getting-started-with-generalized-additive-models-in-python-457df5b4705f
+# https://pypi.org/project/pygam/
+pygam
+
+# https://www.pywhy.org/
+# https://www.pywhy.org/dowhy/v0.14/
+# https://pypi.org/project/dowhy/
+#dowhy               # PyWhy: [econml, causal-learn]
+
+# https://www.microsoft.com/en-us/research/project/econml/
+# https://pypi.org/project/econml/
+# https://github.com/py-why/EconML
+# https://www.pywhy.org/EconML/
+#econml
+
+# https://pypi.org/project/catenets/
+# Based on Jax: windows ONLY CPU, Linux with GPU
+#catenets
+
+
+# requires pytorch 2.0
+# causica
+
+# not necessary
+# pydot
+# pygraphviz

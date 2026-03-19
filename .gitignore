@@ -1,12 +1,14 @@
 .idea
 __pycache__
 _suspended
+_libraries
+jianyi
 *.gz
 *.png
 *.nb
 *.bak
-* - Copy*
 *.zip
 *.hdf5
 *.json
-jianyi
+*.pkl
+

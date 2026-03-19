@@ -15,5 +15,5 @@ DAG:
 
 NB: si potrebbe rappresentare TUTTO in modo compatto
 
-Si e' ineressati SOLO alla struttura, NON alla funzione vera e propria
+Si e' interessati SOLO alla struttura, NON alla funzione vera e propria
 Analisi sensibilita': dataset

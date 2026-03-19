@@ -1,0 +1,73 @@
+dati di incidenti stradali
+    certa strada in un arco temporale un certo numero di incidenti
+        varie corsie, varie direzioni di marcia
+
+
+Physics informed neural network
+
+4 a 10 nodi
+4-6     tutti
+7-10    campionamento
+    diverse distribuzioni
+
+con diverse tipologie di funzioni a 0-(n-1)
+dataset 10000 records
+    1000 record
+    20 + 5*n.predittori
+
+
+method
+    linear
+        gauss
+        exp
+        gumbel
+        uniform
+        logistic  
+
+    nonlinear
+        mlp
+        mim
+        gp
+        gp-add
+
+------------------------------------------------------------------
+
+4-7     tutti i modelli
+8-10    campionamento 500_000
+
+tipi di variabili:
+    continue    [0,1]
+    discrete    {0,1}   + noise: posson
+        poisson
+
+
+Reti causali funzioni booleane
+    funzioni booleane
+        n parametri: sono 2^2^n
+
+rumore benulliano (con un unico parametro)
+    parametro random
+
+100 modelli generativi per ogni topologia.
+
+Reti causali funzioni generiche
+
+
+---------------------
+Discovery ma discreto.
+
+
+---------------------
+Cofounder nascosti
+    identificare i cofounder
+    renderlo inensibile -> convertito in costante
+
+
+----------------------
+d-separation
+
+SID
+
+iguana: latex per powerpoint
+mathpix: da immagine a formula latex
+

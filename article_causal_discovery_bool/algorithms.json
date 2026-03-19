@@ -1,0 +1,371 @@
+{
+    "#pc": {
+        "class": "castle.algorithms.PC",
+        "variant": "original",
+        "alpha": 0.05,
+        "ci_test": "fisherz",
+        "priori_knowledge": null
+    },
+    "#ges": {
+        "class": "castle.algorithms.GES",
+        "criterion": "bic",
+        "method": "scatter",
+        "k": 0.001,
+        "N": 10
+    },
+    "#icalingam": {
+        "class": "castle.algorithms.ICALiNGAM",
+        "random_state": null,
+        "max_iter": 1000,
+        "thresh": 0.3
+    },
+    "#directlingam": {
+        "class": "castle.algorithms.DirectLiNGAM",
+        "prior_knowledge": null,
+        "measure": "pwling",
+        "thresh": 0
+    },
+    "#notears": {
+        "class": "castle.algorithms.Notears",
+        "lambda1": 0.1,
+        "loss_type": "l2",
+        "max_iter": 100,
+        "h_tol": 1e-8,
+        "rho_max": 1e+16,
+        "w_threshold": 0.3
+    },
+    "#notearslowrank": {
+        "#comment": ["extended version to pass 'rank' (used in 'learn') in configuration"],
+        "class": "castlex.algorithms.NotearsLowRank",
+        "w_init": null,
+        "max_iter": 15,
+        "h_tol": 1e-6,
+        "rho_max": 1e+20,
+        "w_threshold": 0.3,
+        "rank": 3
+    },
+
+    "#gae": {
+        "#comment": {
+            "suspended": {
+                "activation_": "torch.nn.LeakyReLU(0.05)"
+            }
+        },
+        "class": "castle.algorithms.GAE",
+        "input_dim": 1,
+        "hidden_layers": 1,
+        "hidden_dim": 4,
+        "epochs": 10,
+        "update_freq": 10000,
+        "init_iter": 3,
+        "lr": 1e-3,
+        "alpha": 0.0,
+        "beta": 2.0,
+        "init_rho": 1.0,
+        "rho_thresh": 1e30,
+        "gamma": 0.25,
+        "penalty_lambda": 0.0,
+        "h_thresh": 1e-8,
+        "graph_thresh": 0.3,
+        "early_stopping": false,
+        "early_stopping_thresh": 1.0,
+        "seed": 1230,
+        "device_type": "gpu",
+        "device_ids": "0"
+    },
+    "#golem": {
+        "#comment": ["slow"],
+        "class": "castle.algorithms.GOLEM",
+        "B_init": null,
+        "lambda_1": 0.02,
+        "lambda_2": 5.0,
+        "equal_variances": true,
+        "learning_rate": 1e-3,
+        "num_iter": 100000,
+        "checkpoint_iter": 5000,
+        "seed": 1,
+        "graph_thres": 0.3,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+    "#notearsnonlinear": {
+        "class": "castle.algorithms.NotearsNonlinear",
+        "lambda1": 0.01,
+        "lambda2": 0.01,
+        "max_iter": 100,
+        "h_tol": 1e-8,
+        "rho_max": 1e+16,
+        "w_threshold": 0.3,
+        "hidden_layers": [10, 1],
+        "expansions": 10,
+        "bias": true,
+        "#model_types": ["mlp", "sob"],
+        "model_type": "mlp",
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+
+    "#--very_slow--": {
+
+    },
+
+    "#anmnonlinear": {
+        "#comment": ["very slow"],
+        "class": "castle.algorithms.ANMNonlinear",
+        "alpha": 0.05
+    },
+
+    "#dag_gnn": {
+        "#comment": ["very slow"],
+        "class": "castle.algorithms.DAG_GNN",
+        "encoder_type": "mlp",
+        "decoder_type": "mlp",
+        "encoder_hidden": 64,
+        "latent_dim": null,
+        "decoder_hidden": 64,
+        "encoder_dropout": 0.0,
+        "decoder_dropout": 0.0,
+        "epochs": 300,
+        "k_max_iter": 100,
+        "tau_a": 0.0,
+        "batch_size": 100,
+        "lr": 1e-3,
+        "lr_decay": 200,
+        "gamma": 1.0,
+        "init_lambda_a": 0.0,
+        "init_c_a": 1.0,
+        "c_a_thresh": 1e20,
+        "eta": 10,
+        "multiply_h": 0.25,
+        "h_tolerance": 1e-8,
+        "use_a_connect_loss": false,
+        "use_a_positiver_loss": false,
+        "graph_threshold": 0.3,
+        "optimizer": "adam",
+        "seed": 42,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+    "#grandag": {
+        "#comment": ["skipped: 'input_dim' in castle GranDAG is delegated to 'learn()"],
+        "class": "castlex.algorithms.GraNDAG",
+        "hidden_num": 2,
+        "hidden_dim": 10,
+        "batch_size": 64,
+        "lr": 0.001,
+        "iterations": 10000,
+        "model_name": "NonLinGaussANM",
+        "nonlinear": "leaky-relu",
+        "optimizer": "rmsprop",
+        "h_threshold": 1e-8,
+        "use_pns": false,
+        "pns_thresh": 0.75,
+        "num_neighbors": null,
+        "normalize": false,
+        "precision": false,
+        "random_seed": 42,
+        "jac_thresh": true,
+        "lambda_init": 0.0,
+        "mu_init": 0.001,
+        "omega_lambda": 0.0001,
+        "omega_mu": 0.9,
+        "stop_crit_win": 100,
+        "edge_clamp_range": 0.0001,
+        "norm_prod": "paths",
+        "square_prod": false,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+    "#corl": {
+        "#comment": [
+            "skipped: required better configuration",
+            "encoder_name: ['transformer', 'lstm', 'mlp']",
+            "decoder_name: ['lstm', 'mlp']"
+        ],
+        "class": "castle.algorithms.CORL",
+        "batch_size": 64,
+        "input_dim": 15,
+        "embed_dim": 32,
+        "normalize": false,
+        "#encoder_name": "mlp",
+        "encoder_name": "transformer",
+        "encoder_heads": 8,
+        "encoder_blocks": 3,
+        "encoder_dropout_rate": 0.1,
+        "#decoder_name": "mlp",
+        "decoder_name": "lstm",
+        "reward_mode": "episodic",
+        "reward_score_type": "BIC",
+        "reward_regression_type": "LR",
+        "reward_gpr_alpha": 1.0,
+        "iteration": 10000,
+        "lambda_iter_num": 500,
+        "actor_lr": 1e-4,
+        "critic_lr": 1e-3,
+        "alpha": 0.99,
+        "init_baseline": -1.0,
+        "random_seed": 0,
+        "log_frequency": 100,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+    "#pnl": {
+        "#comment": [
+            "skipped: very, very slow. Unusable",
+            {
+                "activation_": "torch.nn.LeakyReLU()"
+            }
+        ],
+        "class": "castle.algorithms.PNL",
+        "hidden_layers": 1,
+        "hidden_units": 10,
+        "batch_size": 64,
+        "epochs": 100,
+        "lr": 1e-4,
+        "alpha": 0.01,
+        "bias": true,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+
+    "#-- skipped --": { },
+
+    "#rl": {
+        "#comment": ["skipped: it requires 'learner(data, dag=true_dag)"],
+        "class": "castle.algorithms.RL",
+        "encoder_type": "TransformerEncoder",
+        "hidden_dim": 64,
+        "num_heads": 16,
+        "num_stacks": 6,
+        "residual": false,
+        "decoder_type": "SingleLayerDecoder",
+        "decoder_activation": "tanh",
+        "decoder_hidden_dim": 16,
+        "use_bias": false,
+        "use_bias_constant": false,
+        "bias_initial_value": false,
+        "batch_size": 64,
+        "input_dimension": 64,
+        "normalize": false,
+        "transpose": false,
+        "score_type": "BIC",
+        "reg_type": "LR",
+        "lambda_iter_num": 1000,
+        "lambda_flag_default": true,
+        "score_bd_tight": false,
+        "lambda2_update": 10,
+        "score_lower": 0.0,
+        "score_upper": 0.0,
+        "seed": 8,
+        "nb_epoch": 20000,
+        "lr1_start": 0.001,
+        "lr1_decay_step": 5000,
+        "lr1_decay_rate": 0.96,
+        "alpha": 0.99,
+        "init_baseline": -1.0,
+        "l1_graph_reg": 0.0,
+        "verbose": false,
+        "device_type": "gpu",
+        "device_ids": 0
+    },
+    "#ttpm": {
+        "#comment": ["skipped: missing 'topology_matrix'"],
+        "class": "castle.algorithms.TTPM",
+        "topology_matrix":  "<mandatory>",
+        "delta": 0.1,
+        "epsilon": 1,
+        "max_hop": 0,
+        "penalty": "BIC",
+        "max_iter": 20,
+        "priori_knowledge": null
+    },
+
+    "#-- causal-learn --": { },
+
+    "#cl_pc": {
+        "class": "castlex.algorithms.cl.pc.PC"
+    },
+    "#cl_boss": {
+        "#note": "to reanalyze",
+        "class": "castlex.algorithms.cl.boss.BOSS"
+    },
+
+
+    "#cl_cdnod": {
+        "class": "castlex.algorithms.cl.cdnod.CDNOD",
+        "verbose": false
+    },
+    "#cl_exact_search": {
+        "class": "castlex.algorithms.cl.exact_search.ExactSearch"
+    },
+    "#cl_fci": {
+        "class": "castlex.algorithms.cl.fci.FCI"
+    },
+    "#cl_ges": {
+        "class": "castlex.algorithms.cl.ges.GES"
+    },
+    "#cl_gin": {
+        "class": "castlex.algorithms.cl.gin.GIN",
+        "#note": "very slow"
+    },
+    "#cl_grasp": {
+        "class": "castlex.algorithms.cl.grasp.GRaSP",
+        "verbose": false
+    },
+
+    "#cl_icalingam": {
+        "class": "castlex.algorithms.cl.lingam.ICALiNGAM"
+    },
+    "#cl_directlingam": {
+        "class": "castlex.algorithms.cl.lingam.DirectLiNGAM"
+    },
+    "#cl_varlingam": {
+        "class": "castlex.algorithms.cl.lingam.VARLiNGAM",
+        "#note": ["boh!"]
+    },
+
+    "# -- causal-learn: very slow --": {},
+
+    "#cl_rcd": {
+        "class": "castlex.algorithms.cl.rcd.RCD",
+        "#note": ["very slow"]
+    },
+    "#cl_camuv": {
+        "class": "castlex.algorithms.cl.camuv.CAMUV",
+        "#note": ["very slow"]
+    },
+
+    "# -- lingam --": {},
+
+    "#lin_abiclingam": {
+        "class": "castlex.algorithms.lingam.ABICLiNGAM",
+        "#note:": "very slow"
+    },
+    "#lin_parce_lingam": {
+        "class": "castlex.algorithms.lingam.BottomUpParceLiNGAM"
+    },
+    "#lin_camuv": {
+        "class": "castlex.algorithms.lingam.CAMUV"
+    },
+    "#lin_direct_lingam": {
+        "class": "castlex.algorithms.lingam.DirectLiNGAM"
+    },
+    "#lin_group_lingam": {
+        "class": "castlex.algorithms.lingam.GroupLiNGAM"
+    },
+    "#lin_high_dim_direct_lingam": {
+        "class": "castlex.algorithms.lingam.HighDimDirectLiNGAM"
+    },
+    "#lin_m_lingam": {
+        "class": "castlex.algorithms.lingam.mLiNGAM"
+    },
+    "#lin_rcd": {
+        "class": "castlex.algorithms.lingam.RCD"
+    },
+    "#lin_var_lingam": {
+        "class": "castlex.algorithms.lingam.VARLiNGAM"
+    },
+    "#lin_varma_lingam": {
+        "class": "castlex.algorithms.lingam.VARMALiNGAM"
+    }
+}
